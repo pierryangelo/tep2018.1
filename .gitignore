@@ -102,3 +102,6 @@ ENV/
 
 # PyCharm
 .idea/
+
+# macos cache
+.DS_Store
