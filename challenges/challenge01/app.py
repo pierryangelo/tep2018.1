@@ -50,7 +50,7 @@ def new_user():
         db.session.commit()
         return jsonify(u.serialize()), 201
 
-    return jsonify(sucess=False), 400
+    return jsonify(success=False), 400
 
 
 @app.route('/user/<int:user_id>', methods=["GET"])
@@ -64,7 +64,7 @@ def user_profile(user_id):
     if u:
         return jsonify(id=u.id, name=u.name, email=u.email)
 
-    return jsonify(sucess=False), 400
+    return jsonify(success=False), 400
 
 
 @app.route('/users', methods=["GET"])
