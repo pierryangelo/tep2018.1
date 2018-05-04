@@ -1,9 +1,3 @@
-## Atividade 01
-
-- Pierry A. Pereira
-- Leôncio Ferreira
-
-
 ## 1. [ASCIIartAPI](http://artii.herokuapp.com)
 
 ##### Para que serve?
@@ -54,13 +48,12 @@ postb.bin/b/seubin
 ##### Métodos suportados
 GET, POST, PUT, PATCH, DELETE
 
-##### Exemplo (GET)
+##### Exemplo (TODOS OS MÉTODOS)
 ```python
 import requests
 
-
 # Every bin lasts only 30 minutes
-bin_code = 'k8OFMjgf'
+bin_code = 'change_bin_code_here'
 base_url = f'http://postb.in/'
 url = f'{base_url}{bin_code}'
 
@@ -85,3 +78,34 @@ status_codes.append(r.status_code)
 for i in status_codes:
     print(i)
 ```
+
+
+## 2. [AplicacaoFlask](https://requisicaopost-api.herokuapp.com/)
+
+##### Para que serve?
+Simples CRUD construído para fins de exemplo
+
+##### Como funciona?
+Utilize algum cliente HTTP ou biblioteca equivalente para construir requisições
+
+##### Endpoints
+````
+(POST) Cria um novo usuário (somente json)
+https://requisicaopost-api.herokuapp.com/new/user
+
+(GET) Lista todos os usuários
+https://requisicaopost-api.herokuapp.com/users
+
+(GET) Detalha um usuário
+https://requisicaopost-api.herokuapp.com/user/{user_id}
+````
+
+##### Exemplos
+A aplicação já possui alguns dados, portanto basta realizar as requisicões.
+
+
+
+Equipe
+---
+- Pierry A. Pereira
+- Leôncio Ferreira
