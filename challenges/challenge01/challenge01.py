@@ -30,14 +30,13 @@ base_url = f'http://postb.in/api/bin/'
 # print(r2.status_code)
 # print(r2.text)
 
-
 # CREATING A NEW USER
-# name = 'Joao Paulo III'
-# email = 'adkflkjda@gmail.com'
-#
-# r = requests.post('http://localhost:5000/user/new', data={'name': name, 'email': email})
-# print(r.status_code)
-# print(r.text)
+name = 'Joao Paulo III'
+email = 'adkflkjda@gmail.com'
+
+r = requests.post('http://localhost:5000/user/new', json={'name': name, 'email': email})
+print(r.status_code)
+print(r.text)
 
 
 # # AN SPECIFIC USER BY ID

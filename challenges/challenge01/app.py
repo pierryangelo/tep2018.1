@@ -11,7 +11,11 @@ project_dir = os.path.dirname(os.path.abspath(__file__))
 database_file = "sqlite:///{}".format(os.path.join(project_dir, "users.db"))
 
 app = Flask(__name__)
+
+# All the responses will be UTF-8
 app.config['JSON_AS_ASCII'] = False
+
+#
 app.config["SQLALCHEMY_DATABASE_URI"] = database_file
 
 db = SQLAlchemy(app)
@@ -36,13 +40,12 @@ class User(db.Model):
 @app.route('/user/new', methods=["POST"])
 def new_user():
     """
-    Cria um novo usuário
-    método suportado: POST
-    parâmetros: name, email
-    URL: /user/new
+    Creates a new user
     """
-    name = request.form.get('name')
-    email = request.form.get('email')
+    req_data = request.get_json()
+
+    name = req_data['name']
+    email = req_data['email']
 
     if name and email:
         u = User(name=name, email=email)
@@ -50,32 +53,28 @@ def new_user():
         db.session.commit()
         return jsonify(u.serialize()), 201
 
-    return jsonify(success=False), 400
+    return "", 400
 
 
 @app.route('/user/<int:user_id>', methods=["GET"])
 def user_profile(user_id):
     """
-    Retorna um usuário de acordo com a id
-    parâmetro: user_id
-    URL: /user/user_id
+    Returns an user according to his id
     """
     u = User.query.get(user_id)
     if u:
         return jsonify(id=u.id, name=u.name, email=u.email)
 
-    return jsonify(success=False), 400
+    return "", 400
 
 
 @app.route('/users', methods=["GET"])
 def list_users():
     """
-    Retorna lista de usuários em formato JSON,
-    suporta somente o método GET
-    URL: /users
+    Returns a list user in JSON format
     """
     users = User.query.all()
-    return jsonify([u.serialize() for u in users])
+    return jsonify([u.serialize() for u in users]), 200
 
 
 if __name__ == "__main__":
