@@ -14,21 +14,7 @@ import requests, json
 # r = requests.get(f'http://artii.herokuapp.com/make?text={text}&font={font}')
 
 
-# Exemplo 02
-#bin = 'CpDgSdUd'
-base_url = f'http://postb.in/api/bin/'
 
-# POST
-# r1 = requests.post(f'http://postb.in/api/bin')
-# print(r1.status_code)
-# print(r1.text)
-
-#
-# # GET
-# json_data = json.loads(r1.text)
-# r2 = requests.get(f'{base_url}{json_data["binId"]}')
-# print(r2.status_code)
-# print(r2.text)
 
 # CREATING A NEW USER
 name = 'Joao Paulo III'
