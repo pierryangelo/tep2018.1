@@ -34,20 +34,25 @@ print(r.text)
 r = requests.get(f'http://artii.herokuapp.com/make?text={text}&font={font}')
 ```
 
-## 2. [ASCIIartAPI](http://artii.herokuapp.com)
+## 2. [PostBin](http://postb.in)
 
 ##### Para que serve?
-Transforma texto simples em arte ASCII.
+Testar clientes API e WebHooks.
+Você pode inspecionar as requisições no próprio site ou usar a
+API para testar suas bibliotecas, clientes, projetos, SaaS ou websites.
+
+##### Como funciona?
+1. Crie um bin;
+2. Acesse a url ````postb.in/b/seubin````;
+3. Ao realizar uma requisição, dê um refresh no navegador para visualizá-la;
 
 ##### Endpoints
-artii.herokuapp.com/make
+````
+postb.bin/b/seubin
+````
 
 ##### Métodos suportados
-GET
-
-##### Parâmetros suportados
-- text
-- font
+GET, POST, PUT, PATCH, DELETE
 
 ##### Exemplo (GET)
 ```python
