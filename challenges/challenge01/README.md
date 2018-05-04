@@ -80,7 +80,7 @@ for i in status_codes:
 ```
 
 
-## 2. [AplicacaoFlask](https://requisicaopost-api.herokuapp.com/)
+## 3. [AplicacaoFlask](https://requisicaopost-api.herokuapp.com/)
 
 ##### Para que serve?
 Simples CRUD construído para fins de exemplo
@@ -99,6 +99,9 @@ https://requisicaopost-api.herokuapp.com/users
 (GET) Detalha um usuário
 https://requisicaopost-api.herokuapp.com/user/{user_id}
 ````
+
+##### Métodos suportados
+GET, POST (os outros poderiam ser facilmente implementados)
 
 ##### Exemplos
 A aplicação já possui alguns dados, portanto basta realizar as requisicões.
