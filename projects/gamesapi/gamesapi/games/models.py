@@ -34,7 +34,7 @@ class Player(models.Model):
     FEMALE = 'F'
     GENDER_CHOICES = ((MALE, 'Male'), (FEMALE, 'Female'),)
     created = models.DateTimeField(auto_now_add=True)
-    name = models.CharField(max_length=50, blank=False)
+    name = models.CharField(max_length=50, blank=False, default='')
     gender = models.CharField(max_length=2, choices=GENDER_CHOICES, default=MALE,)
 
     def __str__(self):
@@ -44,10 +44,12 @@ class Player(models.Model):
         ordering = ('name',)
 
 
-class Score(models.Model):
+class PlayerScore(models.Model):
     player = models.ForeignKey(Player,
                                related_name='scores',
                                on_delete=models.CASCADE)
+    game = models.ForeignKey(Game,
+                             on_delete=models.CASCADE)
     score = models.IntegerField()
     score_date = models.DateTimeField()
 

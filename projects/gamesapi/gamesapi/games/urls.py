@@ -7,7 +7,7 @@ urlpatterns = [
          views.GameList.as_view(),
          name=views.GameList.name),
 
-    path('games/<int:pk>/',
+    path('game/<int:pk>/',
          views.GameDetail.as_view(),
          name=views.GameDetail.name),
 
@@ -15,7 +15,7 @@ urlpatterns = [
          views.GameCategoryList.as_view(),
          name=views.GameCategoryList.name),
 
-    path('game-categories/<int:pk>/',
+    path('game-category/<int:pk>/',
          views.GameCategoryDetail.as_view(),
          name=views.GameCategoryDetail.name),
 
@@ -23,15 +23,15 @@ urlpatterns = [
          views.PlayerList.as_view(),
          name=views.PlayerList.name),
 
-    path('players/<int:pk>/',
+    path('player/<int:pk>/',
          views.PlayerDetail.as_view(),
          name=views.PlayerDetail.name),
 
-    path('scores/',
+    path('player-scores/',
          views.PlayerScoreList.as_view(),
          name=views.PlayerScoreList.name),
 
-    path('scores/<int:pk>/',
+    path('player-score/<int:pk>/',
          views.PlayerScoreDetail.as_view(),
          name=views.PlayerScoreDetail.name),
 

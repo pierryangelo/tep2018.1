@@ -4,7 +4,7 @@ from rest_framework import generics
 
 from .serializers import GameSerializer, GameCategorySerializer
 from .serializers import PlayerSerializer, PlayerScoreSerializer
-from .models import Game, GameCategory, Player, Score
+from .models import Game, GameCategory, Player, PlayerScore
 
 
 class GameCategoryList(generics.ListCreateAPIView):
@@ -44,13 +44,13 @@ class PlayerDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 class PlayerScoreList(generics.ListCreateAPIView):
-    queryset = Score.objects.all()
+    queryset = PlayerScore.objects.all()
     serializer_class = PlayerScoreSerializer
     name = 'playerscore-list'
 
 
 class PlayerScoreDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Score.objects.all()
+    queryset = PlayerScore.objects.all()
     serializer_class = PlayerScoreSerializer
     name = 'playerscore-detail'
 
@@ -67,7 +67,7 @@ class ApiRoot(generics.GenericAPIView):
                                            request=request),
                 'games': reverse(GameList.name,
                                  request=request),
-                'scores': reverse(ScoreList.name,
+                'player-scores': reverse(PlayerScoreList.name,
                                   request=request)
 
             }

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Game, GameCategory, Player, Score
+from .models import Game, GameCategory, Player, PlayerScore
 
 
 class GameCategorySerializer(serializers.HyperlinkedModelSerializer):
@@ -47,7 +47,7 @@ class PlayerScoreSerializer(serializers.HyperlinkedModelSerializer):
     )
 
     class Meta:
-        model = Score
+        model = PlayerScore
         fields = (
             'url',
             'pk',
