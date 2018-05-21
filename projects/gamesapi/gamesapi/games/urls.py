@@ -3,6 +3,10 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
+    path('',
+         views.ApiRoot.as_view(),
+         name=views.ApiRoot.name),
+
     path('games/',
          views.GameList.as_view(),
          name=views.GameList.name),
