@@ -1,38 +1,73 @@
 from rest_framework import serializers
-from rest_framework import status
-from .models import Game
+from .models import Game, GameCategory, Player, Score
 
 
-class GameSerializer(serializers.ModelSerializer):
+class GameCategorySerializer(serializers.HyperlinkedModelSerializer):
+    games = serializers.HyperlinkedRelatedField(
+        many=True,
+        read_only=True,
+        view_name='game-detail',
+    )
 
-    def validate_name(self, value):
-        """
-        Não permite nomes iguais
-        """
-        for game in Game.objects.all():
-            if game.name == value:
-                raise serializers.ValidationError("Esse nome já existe!",
-                                                  code=status.HTTP_400_BAD_REQUEST)
-        return value
+    class Meta:
+        model = GameCategory
+        fields = (
+            'url',
+            'pk',
+            'name',
+            'games'
+        )
 
 
-    def validate(self, data):
-        """
-        Não permite campos vazios
-        """
-        for k in data:
-            if not data[k]:
-                raise serializers.ValidationError("Os campos não podem ser vazios!",
-                                                  code=status.HTTP_400_BAD_REQUEST)
-        return data
+class GameSerializer(serializers.HyperlinkedModelSerializer):
+    game_category = serializers.SlugRelatedField(
+        queryset=GameCategory.objects.all(),
+        slug_field='name'
+    )
 
     class Meta:
         model = Game
-        fields = ('id', 'name', 'release_date', 'game_category')
+        fields = (
+            'url',
+            'name',
+            'game_category',
+            'release_date',
+            'played'
+        )
 
 
-        # extra_kwargs = {
-        #     'name': {'required': True},
-        #     'release_date': {'required': True},
-        #     'game_category': {'required': True}
-        # }
+class PlayerScoreSerializer(serializers.HyperlinkedModelSerializer):
+    game = serializers.SlugRelatedField(
+        queryset=Game.objects.all(),
+        slug_field='name'
+    )
+    player = serializers.SlugRelatedField(
+        queryset=Player.objects.all(),
+        slug_field='name'
+    )
+
+    class Meta:
+        model = Score
+        fields = (
+            'url',
+            'pk',
+            'score',
+            'score_date',
+            'player',
+            'game',
+        )
+
+
+class PlayerSerializer(serializers.HyperlinkedModelSerializer):
+    scores = PlayerScoreSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Player
+        fields = (
+            'url',
+            'name',
+            'gender',
+            'scores',
+        )
+
+
