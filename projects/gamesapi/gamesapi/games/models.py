@@ -37,11 +37,11 @@ class Player(models.Model):
     name = models.CharField(max_length=50, blank=False)
     gender = models.CharField(max_length=2, choices=GENDER_CHOICES, default=MALE,)
 
+    def __str__(self):
+        return self.name
+
     class Meta:
         ordering = ('name',)
-
-        def __str__(self):
-            return self.name
 
 
 class Score(models.Model):
