@@ -5,7 +5,10 @@ from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.types import Text
 
-engine = create_engine('postgresql://pierry:wd45$sds@localhost/blog')
+user = 'pierry'
+passwd = ''
+
+engine = create_engine(f'postgresql://{user}:{passwd}@localhost/blog')
 
 Base = declarative_base()
 
