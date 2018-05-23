@@ -9,11 +9,11 @@ from django.db import models
 
 
 class Address(models.Model):
-    user = models.ForeignKey('User', models.CASCADE, related_name="addresses")
-    street = models.CharField(max_length=255)
-    suite = models.CharField(max_length=255)
-    city = models.CharField(max_length=255)
-    zipcode = models.CharField(max_length=255)
+    user = models.ForeignKey('Users', models.CASCADE, related_name="addresses")
+    street = models.CharField(max_length=None)
+    suite = models.CharField(max_length=None)
+    city = models.CharField(max_length=None)
+    zipcode = models.CharField(max_length=None)
 
     class Meta:
         managed = True
@@ -21,8 +21,8 @@ class Address(models.Model):
 
 
 class Comment(models.Model):
-    post = models.ForeignKey('Post', models.CASCADE)
-    name = models.CharField(max_length=255)
+    post = models.ForeignKey('Posts', models.CASCADE)
+    name = models.CharField(max_length=None)
     email = models.EmailField()
     body = models.TextField()
 
@@ -32,8 +32,8 @@ class Comment(models.Model):
 
 
 class Post(models.Model):
-    user = models.ForeignKey('User', models.CASCADE, related_name='posts')
-    title = models.CharField(max_length=255)
+    user = models.ForeignKey('Users', models.CASCADE, related_name='posts')
+    title = models.CharField(max_length=None)
     body = models.TextField()
 
     class Meta:
@@ -42,7 +42,7 @@ class Post(models.Model):
 
 
 class User(models.Model):
-    name = models.CharField(max_length=255, blank=True, null=True)
+    name = models.CharField(max_length=None, blank=True, null=True)
     email = models.EmailField()
 
     class Meta:

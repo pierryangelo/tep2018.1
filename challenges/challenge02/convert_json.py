@@ -6,7 +6,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.types import Text
 
 user = 'pierry'
-passwd = 'wd45$sds'
+passwd = ''
 
 engine = create_engine(f'postgresql://{user}:{passwd}@localhost/blog')
 
