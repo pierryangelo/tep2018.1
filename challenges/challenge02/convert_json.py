@@ -6,7 +6,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.types import Text
 
 user = 'pierry'
-passwd = ''
+passwd = 'wd45$sds'
 
 engine = create_engine(f'postgresql://{user}:{passwd}@localhost/blog')
 
@@ -59,18 +59,22 @@ f = open('data.json')
 data = json.load(f)
 
 # POPULATING USERS TABLE
-# users = data['users'][1:]
+# users = data['users']
 #
 # for user in users:
 #     u = User(id=user['id'], name=user['name'], email=user['email'])
 #     session.add(u)
 #     session.commit()
 
-# POPULATING USERS TABLE
-# users = data['users'][1:]
+
+# POPULATING ADDRESSES TABLE
+# users = data['users']
 #
 # for user in users:
-#     u = User(id=user['id'], name=user['name'], email=user['email'])
-#     session.add(u)
+#     u_adress = user['address']
+#     a = Address(id=user['id'], user_id=user['id'], street=u_adress['street'],
+#                 suite=u_adress['suite'], city=u_adress['city'],
+#                 zipcode=u_adress['zipcode'])
+#     session.add(a)
 #     session.commit()
 
