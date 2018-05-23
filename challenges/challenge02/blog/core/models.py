@@ -1,10 +1,3 @@
-# This is an auto-generated Django model module.
-# You'll have to do the following manually to clean this up:
-#   * Rearrange models' order
-#   * Make sure each model has one field with primary_key=True
-#   * Make sure each ForeignKey has `on_delete` set to the desired behavior.
-#   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
-# Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
 
 
@@ -21,7 +14,8 @@ class Address(models.Model):
 
 
 class Comment(models.Model):
-    post = models.ForeignKey('Post', models.CASCADE)
+    post = models.ForeignKey('Post', models.CASCADE,
+                             related_name='comments')
     name = models.CharField(max_length=255)
     email = models.EmailField()
     body = models.TextField()
@@ -32,7 +26,8 @@ class Comment(models.Model):
 
 
 class Post(models.Model):
-    user = models.ForeignKey('User', models.CASCADE, related_name='posts')
+    user = models.ForeignKey('User', models.CASCADE,
+                             related_name='posts')
     title = models.CharField(max_length=255)
     body = models.TextField()
 

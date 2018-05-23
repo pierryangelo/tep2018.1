@@ -29,6 +29,15 @@ urlpatterns = [
 
     path('user/address/<int:pk>/',
          views.AddressDetail.as_view(),
-         name=views.AddressDetail.name)
+         name=views.AddressDetail.name),
+
+    path('user/comments/',
+         views.CommentList.as_view(),
+         name=views.CommentList.name),
+
+    path('user/comment/<int:pk>/',
+         views.CommentDetail.as_view(),
+         name=views.CommentDetail.name)
+
 
 ]

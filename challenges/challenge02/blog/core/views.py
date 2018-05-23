@@ -2,8 +2,9 @@ from rest_framework.reverse import reverse
 from rest_framework.response import Response
 from rest_framework import generics
 
-from .serializers import UserSerializer, PostSerializer, AddressSerializer
-from .models import User, Post, Address
+from .serializers import UserSerializer, CommentSerializer
+from .serializers import PostSerializer, AddressSerializer
+from .models import User, Post, Address, Comment
 
 
 class ApiRoot(generics.GenericAPIView):
@@ -52,3 +53,13 @@ class AddressDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Address.objects.all()
     serializer_class = AddressSerializer
     name = 'address-detail'
+
+class CommentList(generics.ListCreateAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    name = 'comment-list'
+
+class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    name = 'comment-detail'

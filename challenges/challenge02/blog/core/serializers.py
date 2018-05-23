@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Post, User, Comment, Address
+from .models import Post, User, Comment, Address, Comment
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -29,6 +29,11 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class PostSerializer(serializers.HyperlinkedModelSerializer):
+    comments = serializers.HyperlinkedRelatedField(
+        many=True,
+        read_only=True,
+        view_name='comment-detail',
+    )
 
     class Meta:
         model = Post
@@ -37,6 +42,7 @@ class PostSerializer(serializers.HyperlinkedModelSerializer):
             'id',
             'title',
             'body',
+            'comments'
         )
 
 class AddressSerializer(serializers.HyperlinkedModelSerializer):
@@ -50,4 +56,16 @@ class AddressSerializer(serializers.HyperlinkedModelSerializer):
             'suite',
             'city',
             'zipcode',
+        )
+
+class CommentSerializer(serializers.HyperlinkedModelSerializer):
+
+    class Meta:
+        model = Comment
+        fields = (
+            'url',
+            'id',
+            'name',
+            'email',
+            'body',
         )
