@@ -58,7 +58,7 @@ session = Session()
 f = open('data.json')
 data = json.load(f)
 
-# POPULATING USERS TABLE
+## POPULATING USERS TABLE
 # users = data['users']
 #
 # for user in users:
@@ -67,7 +67,7 @@ data = json.load(f)
 #     session.commit()
 
 
-# POPULATING ADDRESSES TABLE
+## POPULATING ADDRESSES TABLE
 # users = data['users']
 #
 # for user in users:
@@ -78,3 +78,13 @@ data = json.load(f)
 #     session.add(a)
 #     session.commit()
 
+
+## POPULATING POSTS TABLE
+# posts = data['posts']
+#
+# for post in posts:
+#     p = Post(id=post['id'], user_id=post['userId'],
+#              title=post['title'], body=post['body'])
+#
+#     session.add(p)
+#     session.commit()
