@@ -32,7 +32,7 @@ class Address(models.Model):
 
 class Post(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE,
-                             related_name='posts')
+                             related_name='posts', db_column='userId')
     title = models.CharField(max_length=200)
     body = models.TextField()
 
@@ -46,7 +46,8 @@ class Post(models.Model):
 
 class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE,
-                             related_name='comments')
+                             related_name='comments',
+                             db_column='postId')
     name = models.CharField(max_length=200)
     email = models.EmailField()
     body = models.TextField()
