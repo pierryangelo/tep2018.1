@@ -1,43 +1,24 @@
-from django.urls import path
+from django.conf.urls import url, include
 
-from . import views
+from rest_framework_nested import routers
+
+from .views import UserViewSet, PostViewSet, CommentViewSet, AddressViewSet
+
+router = routers.SimpleRouter()
+router.register(r'users', UserViewSet, base_name='users')
+
+users_router = routers.NestedSimpleRouter(router, r'users', lookup='user')
+users_router.register(r'posts', PostViewSet, base_name='posts')
+
+addresses_router = routers.NestedSimpleRouter(router, r'users', lookup='user')
+addresses_router.register(r'addresses', AddressViewSet, base_name='addresses')
+
+posts_router = routers.NestedSimpleRouter(users_router, r'posts', lookup='post')
+posts_router.register(r'comments', CommentViewSet, base_name='comments')
 
 urlpatterns = [
-    path('',
-         views.ApiRoot.as_view(),
-         name=views.ApiRoot.name),
-
-    path('users/',
-         views.UserList.as_view(),
-         name=views.UserList.name),
-
-    path('user/<int:pk>/',
-         views.UserDetail.as_view(),
-         name=views.UserDetail.name),
-
-    path('user/<int:pk>/posts/',
-         views.PostList.as_view(),
-         name=views.PostList.name),
-
-    path('user/<int:pk>/post/<int:pk2>',
-         views.PostDetail.as_view(),
-         name=views.PostDetail.name),
-
-    path('user/<int:pk>/address/<int:pk2/',
-         views.AddressDetail.as_view(),
-         name=views.AddressDetail.name),
-
-    path('user/address/<int:pk>/',
-         views.AddressDetail.as_view(),
-         name=views.AddressDetail.name),
-
-    path('user/comments/',
-         views.CommentList.as_view(),
-         name=views.CommentList.name),
-
-    path('user/comment/<int:pk>/',
-         views.CommentDetail.as_view(),
-         name=views.CommentDetail.name)
-
-
+    url(r'', include(router.urls)),
+    url(r'', include(users_router.urls)),
+    url(r'', include(posts_router.urls)),
+    url(r'', include(addresses_router.urls))
 ]

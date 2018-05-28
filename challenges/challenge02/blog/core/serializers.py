@@ -1,39 +1,43 @@
 from rest_framework import serializers
+from rest_framework_nested.relations import NestedHyperlinkedRelatedField
+from rest_framework_nested import routers
 
 from .models import Post, User, Address, Comment
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
-    posts = serializers.HyperlinkedRelatedField(
+    posts = NestedHyperlinkedRelatedField(
         many=True,
         read_only=True,
-        view_name='post-detail',
+        view_name='user-detail',
     )
 
-    addresses = serializers.HyperlinkedRelatedField(
+    addresses = NestedHyperlinkedRelatedField(
         many=True,
         read_only=True,
-        view_name='address-detail',
+        view_name='user-addresses-detail',
     )
+
 
     class Meta:
         model = User
+
         fields = (
             'url',
             'id',
             'name',
             'email',
             'posts',
-            'addresses',
+            # 'addresses',
         )
 
 
 class PostSerializer(serializers.HyperlinkedModelSerializer):
-    comments = serializers.HyperlinkedRelatedField(
-        many=True,
-        read_only=True,
-        view_name='comment-detail',
-    )
+    # comments = serializers.NestedHyperlinkedRelatedField(
+    #     many=True,
+    #     read_only=True,
+    #     view_name='post-comment-detail',
+    # )
 
     class Meta:
         model = Post
@@ -58,6 +62,7 @@ class AddressSerializer(serializers.HyperlinkedModelSerializer):
             'city',
             'zipcode',
         )
+
 
 class CommentSerializer(serializers.HyperlinkedModelSerializer):
 
