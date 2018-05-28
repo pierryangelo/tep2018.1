@@ -15,17 +15,17 @@ urlpatterns = [
          views.UserDetail.as_view(),
          name=views.UserDetail.name),
 
-    path('posts/',
+    path('user/<int:pk>/posts/',
          views.PostList.as_view(),
          name=views.PostList.name),
 
-    path('post/<int:pk>/',
+    path('user/<int:pk>/post/<int:pk2>',
          views.PostDetail.as_view(),
          name=views.PostDetail.name),
 
-    path('user/addresses/',
-         views.AddressList.as_view(),
-         name=views.AddressList.name),
+    path('user/<int:pk>/address/<int:pk2/',
+         views.AddressDetail.as_view(),
+         name=views.AddressDetail.name),
 
     path('user/address/<int:pk>/',
          views.AddressDetail.as_view(),

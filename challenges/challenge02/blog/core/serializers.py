@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Post, User, Comment, Address, Comment
+from .models import Post, User, Address, Comment
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -44,6 +44,7 @@ class PostSerializer(serializers.HyperlinkedModelSerializer):
             'body',
             'comments'
         )
+
 
 class AddressSerializer(serializers.HyperlinkedModelSerializer):
 
