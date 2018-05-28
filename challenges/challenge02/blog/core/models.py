@@ -20,6 +20,7 @@ class Comment(models.Model):
     email = models.EmailField()
     body = models.TextField()
 
+
     class Meta:
         managed = True
         db_table = 'comments'
