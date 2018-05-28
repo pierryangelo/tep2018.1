@@ -20,6 +20,8 @@ class Comment(models.Model):
     email = models.EmailField()
     body = models.TextField()
 
+    def __str__(self):
+        return self.name
 
     class Meta:
         managed = True
@@ -32,6 +34,12 @@ class Post(models.Model):
     title = models.CharField(max_length=255)
     body = models.TextField()
 
+    def __str__(self):
+        return self.title
+
+    def total_comments(self):
+        return self.comments.objects.count()
+
     class Meta:
         managed = True
         db_table = 'posts'
@@ -40,6 +48,10 @@ class Post(models.Model):
 class User(models.Model):
     name = models.CharField(max_length=255, blank=True, null=True)
     email = models.EmailField()
+
+
+    def __str__(self):
+        return self.name
 
     class Meta:
         managed = True

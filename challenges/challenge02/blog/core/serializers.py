@@ -30,6 +30,23 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         )
 
 
+class UserSummarySerializer(serializers.HyperlinkedModelSerializer):
+    total_comments = serializers.SerializerMethodField(method_name='total_comments')
+    total_posts = serializers.SerializerMethodField(method_name='total_posts')
+
+    def total_posts(self, o):
+        return o.posts.all().count()
+
+    def total_comments(self, o):
+        c = 0
+        for p in o.posts.all():
+            c += p.comments.all().count()
+        return c
+
+    class Meta:
+        model = User
+        fields = ('id', 'name', 'total_posts', 'total_comments')
+
 class PostSerializer(serializers.HyperlinkedModelSerializer):
     comments = NestedHyperlinkedRelatedField(
         many=True,
