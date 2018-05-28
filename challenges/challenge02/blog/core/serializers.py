@@ -47,6 +47,7 @@ class UserSummarySerializer(serializers.HyperlinkedModelSerializer):
         model = User
         fields = ('id', 'name', 'total_posts', 'total_comments')
 
+
 class PostSerializer(serializers.HyperlinkedModelSerializer):
     comments = NestedHyperlinkedRelatedField(
         many=True,

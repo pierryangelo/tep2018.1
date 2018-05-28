@@ -1,8 +1,4 @@
-from django.shortcuts import get_object_or_404
-
 from rest_framework import viewsets, generics
-from rest_framework.response import Response
-
 
 from .serializers import UserSerializer, CommentSerializer
 from .serializers import PostSerializer, AddressSerializer
