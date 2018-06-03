@@ -1,4 +1,4 @@
-from rest_framework import viewsets, generics
+from rest_framework import viewsets
 
 from .serializers import UserSerializer, CommentSerializer
 from .serializers import PostSerializer, AddressSerializer
