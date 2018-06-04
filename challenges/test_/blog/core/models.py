@@ -23,6 +23,7 @@ class Comment(models.Model):
     def __str__(self):
         return self.name
 
+
     class Meta:
         managed = True
         db_table = 'comments'
@@ -37,8 +38,9 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 
+    @property
     def total_comments(self):
-        return self.comments.objects.count()
+        return self.comments.count()
 
     class Meta:
         managed = True
@@ -48,6 +50,15 @@ class Post(models.Model):
 class User(models.Model):
     name = models.CharField(max_length=255, blank=True, null=True)
     email = models.EmailField()
+
+    def total_posts(self):
+        return self.posts.count()
+
+    def total_comments(self):
+        total = 0
+        for p in self.posts.all():
+            total += p.total_comments()
+        return total
 
 
     def __str__(self):

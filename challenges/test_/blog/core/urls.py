@@ -2,12 +2,12 @@ from django.conf.urls import url, include
 
 from rest_framework_nested import routers
 
-from .views import UserViewSet, PostViewSet, CommentViewSet, AddressViewSet
+from .views import UserViewSet, PostViewSet, CommentViewSet, AddressViewSet, UserSummaryViewSet
 
 router = routers.SimpleRouter()
 
 router.register(r'users', UserViewSet, base_name='users')
-router.register(r'quick', UserViewSet, base_name='quick')
+router.register(r'quick', UserSummaryViewSet, base_name='quick')
 
 users_router = routers.NestedSimpleRouter(router, r'users', lookup='user')
 users_router.register(r'posts', PostViewSet, base_name='posts')

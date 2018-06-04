@@ -93,17 +93,22 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class UserSummarySerializer(serializers.HyperlinkedModelSerializer):
-    total_comments = serializers.SerializerMethodField(method_name='total_comments')
-    total_posts = serializers.SerializerMethodField(method_name='total_posts')
 
-    def total_posts(self, o):
-        return o.posts.all().count()
+    url = serializers.HyperlinkedIdentityField(view_name='quick-detail')
 
-    def total_comments(self, o):
-        c = 0
-        for p in o.posts.all():
-            c += p.comments.all().count()
-        return c
+    total_comments = serializers.SerializerMethodField()
+    total_posts = serializers.SerializerMethodField()
+
+    def get_total_posts(self, obj):
+        return obj.posts.count()
+
+    def get_total_comments(self, obj):
+        total_comments = 0
+        for p in obj.posts.all():
+            total_comments += p.total_comments
+
+        return total_comments
+
 
     class Meta:
         model = User
