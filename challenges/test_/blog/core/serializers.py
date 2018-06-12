@@ -1,19 +1,14 @@
 from rest_framework import serializers
-from rest_framework_nested.relations import NestedHyperlinkedRelatedField
-from rest_framework_nested.serializers import NestedHyperlinkedModelSerializer, NestedHyperlinkedIdentityField
 
 from .models import Post, User, Address, Comment
 
 
-class CommentSerializer(NestedHyperlinkedModelSerializer):
-    url = NestedHyperlinkedIdentityField(view_name='comments-detail',
-                                         parent_lookup_kwargs={'post_pk': 'post__pk'})
+class CommentSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Comment
 
         fields = (
-            'url',
             'id',
             'name',
             'email',
@@ -21,22 +16,18 @@ class CommentSerializer(NestedHyperlinkedModelSerializer):
         )
 
 
-class PostSerializer(NestedHyperlinkedModelSerializer):
+class PostSerializer(serializers.HyperlinkedModelSerializer):
 
-    url = NestedHyperlinkedIdentityField(view_name='posts-detail',
-                                         parent_lookup_kwargs={'user_pk': 'user__pk'})
-
-    comments = NestedHyperlinkedRelatedField(
+    comments = serializers.HyperlinkedRelatedField(
         many=True,
         read_only=True,
-        view_name='comments-detail',
-        parent_lookup_kwargs={'post_pk': 'post__pk'}
+        view_name='comments-detail'
     )
 
     class Meta:
         model = Post
         fields = (
-            'url',
+            'id',
             'user',
             'title',
             'body',
@@ -44,14 +35,12 @@ class PostSerializer(NestedHyperlinkedModelSerializer):
         )
 
 
-class AddressSerializer(NestedHyperlinkedModelSerializer):
-    url = NestedHyperlinkedIdentityField(view_name='addresses-detail',
-                                         parent_lookup_kwargs={'user_pk': 'user__pk'})
+class AddressSerializer(serializers.HyperlinkedModelSerializer):
+
     class Meta:
         model = Address
 
         fields = (
-            'url',
             'id',
             'street',
             'suite',
@@ -62,28 +51,22 @@ class AddressSerializer(NestedHyperlinkedModelSerializer):
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
 
-    url = serializers.HyperlinkedIdentityField(view_name='users-detail')
-
-    posts = NestedHyperlinkedRelatedField(
+    posts = serializers.HyperlinkedRelatedField(
         many=True,
         read_only=True,
         view_name='posts-detail',
-        parent_lookup_kwargs={'user_pk': 'user__pk'}
     )
 
-    addresses = NestedHyperlinkedRelatedField(
+    addresses = serializers.HyperlinkedRelatedField(
         many=True,
         read_only=True,
         view_name='addresses-detail',
-        parent_lookup_kwargs={'user_pk': 'user__pk'}
-
     )
 
     class Meta:
         model = User
 
         fields = (
-            'url',
             'id',
             'name',
             'email',
@@ -93,8 +76,6 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class UserSummarySerializer(serializers.HyperlinkedModelSerializer):
-
-    url = serializers.HyperlinkedIdentityField(view_name='quick-detail')
 
     total_comments = serializers.SerializerMethodField()
     total_posts = serializers.SerializerMethodField()
@@ -108,7 +89,6 @@ class UserSummarySerializer(serializers.HyperlinkedModelSerializer):
             total_comments += p.total_comments
 
         return total_comments
-
 
     class Meta:
         model = User

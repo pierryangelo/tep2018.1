@@ -60,7 +60,6 @@ class User(models.Model):
             total += p.total_comments()
         return total
 
-
     def __str__(self):
         return self.name
 
