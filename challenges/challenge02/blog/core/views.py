@@ -67,6 +67,28 @@ class UserPostDetail(generics.RetrieveUpdateDestroyAPIView):
         return user_post
 
 
+class UserPostCommentList(generics.ListCreateAPIView):
+    serializer_class = CommentSerializer
+
+    def get_queryset(self):
+        user_pk = self.kwargs.get('pk')
+        post_pk = self.kwargs.get('post_pk')
+        user_post_comments = Comment.objects.filter(post__user__pk=user_pk, post__pk=post_pk)
+        return user_post_comments
+
+
+class UserPostCommentDetail(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = CommentSerializer
+    queryset = Comment.objects.all()
+
+    def get_object(self):
+        user_pk = self.kwargs.get('pk')
+        post_pk = self.kwargs.get('post_pk')
+        comment_pk = self.kwargs.get('comment_pk')
+        user_post_comment = Comment.objects.get(id=comment_pk, post__id=post_pk, post__user__id=user_pk)
+        return user_post_comment
+
+
 class UserAddressList(generics.ListCreateAPIView):
     serializer_class = AddressSerializer
     lookup_url_kwarg = 'pk'
@@ -86,3 +108,4 @@ class UserAddressDetail(generics.RetrieveUpdateDestroyAPIView):
         address_pk = self.kwargs.get('address_pk')
         user_address = Address.objects.get(id=address_pk, user__pk=user_pk)
         return user_address
+
