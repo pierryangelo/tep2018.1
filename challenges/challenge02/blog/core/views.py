@@ -54,3 +54,13 @@ class UserPosts(generics.ListCreateAPIView):
         user_pk = self.kwargs.get(self.lookup_url_kwarg)
         user_posts = Post.objects.filter(user__pk=user_pk)
         return user_posts
+
+
+class UserPost(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = PostSerializer
+
+    def get_queryset(self):
+        user_pk = self.kwargs.get('pk')
+        post_pk = self.kwargs.get('post_pk')
+        user_post = Post.objects.filter(id=post_pk, user__pk=user_pk)
+        return user_post
