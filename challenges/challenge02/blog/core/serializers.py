@@ -4,7 +4,20 @@ from rest_framework.reverse import reverse
 from .models import Post, User, Address, Comment
 
 
+class IdentityCustomField(serializers.HyperlinkedIdentityField):
+    def get_url(self, obj, view_name, request, format):
+        url_kwargs = {
+            'pk': obj.user.pk,
+            'post_pk': obj.pk
+        }
+        return reverse(view_name, kwargs=url_kwargs, request=request, format=format)
+
+
 class PostSerializer(serializers.HyperlinkedModelSerializer):
+
+    url = IdentityCustomField(
+        view_name='user-post'
+    )
 
     comments = serializers.HyperlinkedRelatedField(
         many=True,
@@ -39,7 +52,7 @@ class AddressSerializer(serializers.HyperlinkedModelSerializer):
         )
 
 
-class UserPostSerializer(serializers.HyperlinkedRelatedField):
+class UserPostRelatedField(serializers.HyperlinkedRelatedField):
     def get_url(self, obj, view_name, request, format):
         url_kwargs = {
             'pk': obj.user.pk,
@@ -57,7 +70,7 @@ class UserPostSerializer(serializers.HyperlinkedRelatedField):
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
 
-    posts = UserPostSerializer(
+    posts = UserPostRelatedField(
         many=True,
         read_only=True,
         view_name='user-post',
