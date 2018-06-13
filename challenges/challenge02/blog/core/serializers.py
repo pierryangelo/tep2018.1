@@ -4,7 +4,7 @@ from rest_framework.reverse import reverse
 from .models import Post, User, Address, Comment
 
 
-class IdentityCustomField(serializers.HyperlinkedIdentityField):
+class PostIdentityField(serializers.HyperlinkedIdentityField):
     def get_url(self, obj, view_name, request, format):
         url_kwargs = {
             'pk': obj.user.pk,
@@ -15,8 +15,8 @@ class IdentityCustomField(serializers.HyperlinkedIdentityField):
 
 class PostSerializer(serializers.HyperlinkedModelSerializer):
 
-    url = IdentityCustomField(
-        view_name='user-post'
+    url = PostIdentityField(
+        view_name='user-post-detail'
     )
 
     comments = serializers.HyperlinkedRelatedField(
@@ -37,7 +37,20 @@ class PostSerializer(serializers.HyperlinkedModelSerializer):
         )
 
 
+class AddressIdentityField(serializers.HyperlinkedIdentityField):
+    def get_url(self, obj, view_name, request, format):
+        url_kwargs = {
+            'pk': obj.user.pk,
+            'address_pk': obj.pk
+        }
+        return reverse(view_name, kwargs=url_kwargs, request=request, format=format)
+
+
 class AddressSerializer(serializers.HyperlinkedModelSerializer):
+
+    url = AddressIdentityField(
+        view_name='user-address-detail'
+    )
 
     class Meta:
         model = Address
@@ -68,18 +81,34 @@ class UserPostRelatedField(serializers.HyperlinkedRelatedField):
         return self.get_queryset().get(**lookup_kwargs)
 
 
+class UserAddressRelatedField(serializers.HyperlinkedRelatedField):
+    def get_url(self, obj, view_name, request, format):
+        url_kwargs = {
+            'pk': obj.user.pk,
+            'address_pk': obj.pk
+        }
+        return reverse(view_name, kwargs=url_kwargs, request=request, format=format)
+
+    def get_object(self, view_name, view_args, view_kwargs):
+        lookup_kwargs = {
+            'user__pk': view_kwargs['pk'],
+            'pk': view_kwargs['address_pk']
+        }
+        return self.get_queryset().get(**lookup_kwargs)
+
+
 class UserSerializer(serializers.HyperlinkedModelSerializer):
 
     posts = UserPostRelatedField(
         many=True,
         read_only=True,
-        view_name='user-post',
+        view_name='user-post-detail',
     )
 
-    addresses = serializers.HyperlinkedRelatedField(
+    addresses = UserAddressRelatedField(
         many=True,
         read_only=True,
-        view_name='address-detail',
+        view_name='user-address-detail',
     )
 
     class Meta:

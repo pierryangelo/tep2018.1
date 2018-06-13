@@ -46,7 +46,7 @@ class PostDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Post.objects.all()
 
 
-class UserPosts(generics.ListCreateAPIView):
+class UserPostList(generics.ListCreateAPIView):
     serializer_class = PostSerializer
     lookup_url_kwarg = 'pk'
 
@@ -56,7 +56,7 @@ class UserPosts(generics.ListCreateAPIView):
         return user_posts
 
 
-class UserPost(generics.RetrieveUpdateDestroyAPIView):
+class UserPostDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = PostSerializer
 
     def get_queryset(self):
@@ -64,3 +64,23 @@ class UserPost(generics.RetrieveUpdateDestroyAPIView):
         post_pk = self.kwargs.get('post_pk')
         user_post = Post.objects.filter(id=post_pk, user__pk=user_pk)
         return user_post
+
+
+class UserAddressList(generics.ListCreateAPIView):
+    serializer_class = AddressSerializer
+    lookup_url_kwarg = 'pk'
+
+    def get_queryset(self):
+        user_pk = self.kwargs.get(self.lookup_url_kwarg)
+        user_addresses = Address.objects.filter(user__pk=user_pk)
+        return user_addresses
+
+
+class UserAddressDetail(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = AddressSerializer
+
+    def get_queryset(self):
+        user_pk = self.kwargs.get('pk')
+        address_pk = self.kwargs.get('address_pk')
+        user_address = Address.objects.filter(id=address_pk, user__pk=user_pk)
+        return user_address
