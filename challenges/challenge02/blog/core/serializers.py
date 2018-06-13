@@ -141,25 +141,6 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             'addresses',
         )
 
-#
-# class UserSummarySerializer(serializers.HyperlinkedModelSerializer):
-#     total_comments = serializers.SerializerMethodField(method_name='total_comments')
-#     total_posts = serializers.SerializerMethodField(method_name='total_posts')
-#
-#     def total_posts(self, o):
-#         return o.posts.all().count()
-#
-#     def total_comments(self, o):
-#         c = 0
-#         for p in o.posts.all():
-#             c += p.comments.all().count()
-#         return c
-#
-#     class Meta:
-#         model = User
-#         fields = ('url', 'id', 'name', 'total_posts', 'total_comments')
-
-
 
 class CommentIdentityField(serializers.HyperlinkedIdentityField):
     def get_url(self, obj, view_name, request, format):
