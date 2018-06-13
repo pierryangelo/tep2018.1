@@ -58,11 +58,12 @@ class UserPostList(generics.ListCreateAPIView):
 
 class UserPostDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = PostSerializer
+    queryset = Post.objects.all()
 
-    def get_queryset(self):
+    def get_object(self):
         user_pk = self.kwargs.get('pk')
         post_pk = self.kwargs.get('post_pk')
-        user_post = Post.objects.filter(id=post_pk, user__pk=user_pk)
+        user_post = Post.objects.get(id=post_pk, user__id=user_pk)
         return user_post
 
 
@@ -78,9 +79,10 @@ class UserAddressList(generics.ListCreateAPIView):
 
 class UserAddressDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = AddressSerializer
+    queryset = Address.objects.all()
 
-    def get_queryset(self):
+    def get_object(self):
         user_pk = self.kwargs.get('pk')
         address_pk = self.kwargs.get('address_pk')
-        user_address = Address.objects.filter(id=address_pk, user__pk=user_pk)
+        user_address = Address.objects.get(id=address_pk, user__pk=user_pk)
         return user_address
