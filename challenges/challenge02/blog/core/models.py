@@ -37,9 +37,6 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 
-    def total_comments(self):
-        return self.comments.objects.count()
-
     class Meta:
         managed = True
         db_table = 'posts'
