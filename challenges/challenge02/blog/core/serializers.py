@@ -33,8 +33,6 @@ class UserPostCommentRelatedField(serializers.HyperlinkedRelatedField):
 
 class PostSerializer(serializers.HyperlinkedModelSerializer):
 
-    total_comments = serializers.SerializerMethodField()
-
     url = PostIdentityField(
         view_name='user-post-detail'
     )
@@ -44,11 +42,6 @@ class PostSerializer(serializers.HyperlinkedModelSerializer):
         read_only=True,
         view_name='user-post-comment-detail',
     )
-
-    # if not specified in attribute method_name in SerializerMethodField,
-    # the convention says we must add 'get_' prefix.
-    def get_total_comments(self, obj):
-        return obj.comments.all().count()
 
     class Meta:
         model = Post
@@ -63,6 +56,12 @@ class PostSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class PostCommentTotalSerializer(PostSerializer):
+    total_comments = serializers.SerializerMethodField()
+
+    # if not specified in attribute method_name in SerializerMethodField,
+    # the convention says we must add 'get_' prefix.
+    def get_total_comments(self, obj):
+        return obj.comments.all().count()
 
     class Meta:
         model = Post
