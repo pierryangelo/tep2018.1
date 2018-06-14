@@ -20,5 +20,8 @@ urlpatterns = [
     path(r'user/<int:pk>/post/<int:post_pk>/comment/<int:comment_pk>',
          views.UserPostCommentDetail.as_view(), name='user-post-comment-detail'),
     path(r'user-comments/', views.UserPostTotalCommentList.as_view(), name='user-comment'),
-    path(r'user-comment/<int:pk>/', views.UserPostTotalCommentDetail.as_view(), name='user-comment-detail')
+    path(r'user-comment/<int:pk>/', views.UserPostTotalCommentDetail.as_view(), name='user-comment-detail'),
+    path(r'users-summaries/', views.UserSummaryList.as_view(), name='user-summary-list'),
+    path(r'user-summary/<int:pk>/', views.UserSummaryDetail.as_view(), name='user-summary-detail'),
+
 ]

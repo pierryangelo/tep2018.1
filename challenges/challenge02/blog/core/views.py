@@ -3,7 +3,7 @@ from rest_framework.response import Response
 
 from .serializers import UserSerializer, CommentSerializer
 from .serializers import PostSerializer, AddressSerializer
-from .serializers import UserPostsTotalCommentsSerializer
+from .serializers import UserPostsTotalCommentsSerializer, UserSummarySerializer
 from .models import User, Post, Address, Comment
 
 
@@ -120,3 +120,12 @@ class UserAddressDetail(generics.RetrieveUpdateDestroyAPIView):
         user_address = Address.objects.get(id=address_pk, user__pk=user_pk)
         return user_address
 
+
+class UserSummaryList(generics.ListAPIView):
+    serializer_class = UserSummarySerializer
+    queryset = User.objects.all()
+
+
+class UserSummaryDetail(generics.RetrieveAPIView):
+    serializer_class = UserSummarySerializer
+    queryset = User.objects.all()

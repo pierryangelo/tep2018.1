@@ -204,3 +204,26 @@ class CommentSerializer(serializers.HyperlinkedModelSerializer):
             'email',
             'body',
         )
+
+
+class UserSummarySerializer(UserSerializer):
+    total_posts = serializers.SerializerMethodField()
+    # total_comments = serializers.SerializerMethodField()
+
+    def get_total_posts(self, obj):
+        return obj.posts.all().count()
+
+    # def get_total_comments(self, obj):
+    #     total = 0
+    #     for post in obj.posts.all():
+    #         total += post.total_comments()
+    #     return total
+
+    class Meta:
+        model = User
+        fields = (
+            'id',
+            'name',
+            'total_posts',
+            # 'total_comments',
+        )
