@@ -3,7 +3,13 @@ from rest_framework.response import Response
 
 from .serializers import UserSerializer, CommentSerializer
 from .serializers import PostSerializer, AddressSerializer
+from .serializers import UserPostsTotalCommentsSerializer
 from .models import User, Post, Address, Comment
+
+
+class UserPostsTotalComments(generics.ListAPIView):
+    serializer_class = UserPostsTotalCommentsSerializer
+    queryset = User.objects.all()
 
 
 class UserList(generics.ListCreateAPIView):

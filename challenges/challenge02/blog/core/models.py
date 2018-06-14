@@ -52,6 +52,9 @@ class User(models.Model):
     def __str__(self):
         return self.name
 
+    def total_posts(self):
+        return self.posts.count()
+
     class Meta:
         managed = True
         db_table = 'users'
