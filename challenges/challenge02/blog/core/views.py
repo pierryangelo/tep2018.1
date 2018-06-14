@@ -7,7 +7,12 @@ from .serializers import UserPostsTotalCommentsSerializer
 from .models import User, Post, Address, Comment
 
 
-class UserPostsTotalComments(generics.ListAPIView):
+class UserPostTotalCommentList(generics.ListAPIView):
+    serializer_class = UserPostsTotalCommentsSerializer
+    queryset = User.objects.all()
+
+
+class UserPostTotalCommentDetail(generics.RetrieveAPIView):
     serializer_class = UserPostsTotalCommentsSerializer
     queryset = User.objects.all()
 

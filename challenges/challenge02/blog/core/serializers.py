@@ -75,8 +75,16 @@ class PostCommentTotalSerializer(PostSerializer):
         )
 
 
-class UserPostsTotalCommentsSerializer(serializers.HyperlinkedModelSerializer):
+class UserPostsTotalCommentsIdentity(serializers.HyperlinkedIdentityField):
+    def get_url(self, obj, view_name, request, format):
+        url_kwargs = {
+            'pk': obj.pk,
+        }
+        return reverse(view_name, kwargs=url_kwargs, request=request, format=format)
 
+
+class UserPostsTotalCommentsSerializer(serializers.HyperlinkedModelSerializer):
+    url = UserPostsTotalCommentsIdentity(view_name='user-comment-detail')
     posts = PostCommentTotalSerializer(many=True)
 
     class Meta:

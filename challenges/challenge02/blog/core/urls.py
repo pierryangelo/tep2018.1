@@ -19,5 +19,6 @@ urlpatterns = [
          views.UserPostCommentList.as_view(), name='user-post-comment-list'),
     path(r'user/<int:pk>/post/<int:post_pk>/comment/<int:comment_pk>',
          views.UserPostCommentDetail.as_view(), name='user-post-comment-detail'),
-    path(r'user-comments/', views.UserPostsTotalComments.as_view(), name='user-comments'),
+    path(r'user-comments/', views.UserPostTotalCommentList.as_view(), name='user-comment'),
+    path(r'user-comment/<int:pk>/', views.UserPostTotalCommentDetail.as_view(), name='user-comment-detail')
 ]
