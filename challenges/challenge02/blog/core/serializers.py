@@ -171,6 +171,7 @@ class ProfileSerializer(serializers.HyperlinkedModelSerializer):
 
         fields = (
             'url',
+            'user_id',
             'id',
             'name',
             'email',

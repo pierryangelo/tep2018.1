@@ -63,7 +63,7 @@ data = json.load(f)
 profiles = data['profiles']
 
 for profile in profiles:
-    u = Profile(id=profile['id'], user_id=profile['id'], name=profile['name'], email=profile['email'])
+    u = Profile(id=profile['id'], user_id=profile['id']+1, name=profile['name'], email=profile['email'])
     session.add(u)
     session.commit()
 
