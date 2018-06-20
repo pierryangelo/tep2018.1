@@ -1,8 +1,9 @@
 from django.db import models
 
+from django.contrib.auth.models import User
 
 class Address(models.Model):
-    user = models.ForeignKey('User', models.CASCADE, related_name="addresses")
+    profile = models.ForeignKey('Profile', models.CASCADE, related_name="addresses")
     street = models.CharField(max_length=255)
     suite = models.CharField(max_length=255)
     city = models.CharField(max_length=255)
@@ -29,7 +30,7 @@ class Comment(models.Model):
 
 
 class Post(models.Model):
-    user = models.ForeignKey('User', models.CASCADE,
+    profile = models.ForeignKey('Profile', models.CASCADE,
                              related_name='posts')
     title = models.CharField(max_length=255)
     body = models.TextField()
@@ -42,9 +43,13 @@ class Post(models.Model):
         db_table = 'posts'
 
 
-class User(models.Model):
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=255, blank=True, null=True)
     email = models.EmailField()
+
+    def __str__(self):
+        return self.email
 
     def __str__(self):
         return self.name
@@ -54,4 +59,4 @@ class User(models.Model):
 
     class Meta:
         managed = True
-        db_table = 'users'
+        db_table = 'profiles'

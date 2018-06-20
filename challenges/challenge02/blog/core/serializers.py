@@ -1,22 +1,22 @@
 from rest_framework import serializers
 from rest_framework.reverse import reverse
 
-from .models import Post, User, Address, Comment
+from .models import Post, Address, Comment, Profile
 
 
 class PostIdentityField(serializers.HyperlinkedIdentityField):
     def get_url(self, obj, view_name, request, format):
         url_kwargs = {
-            'pk': obj.user.pk,
+            'pk': obj.profile.pk,
             'post_pk': obj.pk
         }
         return reverse(view_name, kwargs=url_kwargs, request=request, format=format)
 
 
-class UserPostCommentRelatedField(serializers.HyperlinkedRelatedField):
+class ProfilePostCommentRelatedField(serializers.HyperlinkedRelatedField):
     def get_url(self, obj, view_name, request, format):
         url_kwargs = {
-            'pk': obj.post.user.pk,
+            'pk': obj.post.profile.pk,
             'post_pk': obj.post.pk,
             'comment_pk': obj.pk
         }
@@ -24,7 +24,7 @@ class UserPostCommentRelatedField(serializers.HyperlinkedRelatedField):
 
     def get_object(self, view_name, view_args, view_kwargs):
         lookup_kwargs = {
-            'user__pk': view_kwargs['pk'],
+            'profile__pk': view_kwargs['pk'],
             'post__pk': view_kwargs['post_pk'],
             'pk': view_kwargs['comment_pk']
         }
@@ -34,20 +34,20 @@ class UserPostCommentRelatedField(serializers.HyperlinkedRelatedField):
 class PostSerializer(serializers.HyperlinkedModelSerializer):
 
     url = PostIdentityField(
-        view_name='user-post-detail'
+        view_name='profile-post-detail'
     )
 
-    comments = UserPostCommentRelatedField(
+    comments = ProfilePostCommentRelatedField(
         many=True,
         read_only=True,
-        view_name='user-post-comment-detail',
+        view_name='profile-post-comment-detail',
     )
 
     class Meta:
         model = Post
         fields = (
             'url',
-            'user',
+            'profile',
             'id',
             'title',
             'body',
@@ -67,7 +67,7 @@ class PostCommentTotalSerializer(PostSerializer):
         model = Post
         fields = (
             'url',
-            'user',
+            'profile',
             'id',
             'title',
             'body',
@@ -75,7 +75,7 @@ class PostCommentTotalSerializer(PostSerializer):
         )
 
 
-class UserPostsTotalCommentsIdentity(serializers.HyperlinkedIdentityField):
+class ProfilePostsTotalCommentsIdentity(serializers.HyperlinkedIdentityField):
     def get_url(self, obj, view_name, request, format):
         url_kwargs = {
             'pk': obj.pk,
@@ -83,19 +83,19 @@ class UserPostsTotalCommentsIdentity(serializers.HyperlinkedIdentityField):
         return reverse(view_name, kwargs=url_kwargs, request=request, format=format)
 
 
-class UserPostsTotalCommentsSerializer(serializers.HyperlinkedModelSerializer):
-    url = UserPostsTotalCommentsIdentity(view_name='user-comment-detail')
+class ProfilePostsTotalCommentsSerializer(serializers.HyperlinkedModelSerializer):
+    url = ProfilePostsTotalCommentsIdentity(view_name='profile-comment-detail')
     posts = PostCommentTotalSerializer(many=True)
 
     class Meta:
-        model = User
+        model = Profile
         fields = ('url', 'id', 'posts')
 
 
 class AddressIdentityField(serializers.HyperlinkedIdentityField):
     def get_url(self, obj, view_name, request, format):
         url_kwargs = {
-            'pk': obj.user.pk,
+            'pk': obj.profile.pk,
             'address_pk': obj.pk
         }
         return reverse(view_name, kwargs=url_kwargs, request=request, format=format)
@@ -104,7 +104,7 @@ class AddressIdentityField(serializers.HyperlinkedIdentityField):
 class AddressSerializer(serializers.HyperlinkedModelSerializer):
 
     url = AddressIdentityField(
-        view_name='user-address-detail'
+        view_name='profile-address-detail'
     )
 
     class Meta:
@@ -120,54 +120,54 @@ class AddressSerializer(serializers.HyperlinkedModelSerializer):
         )
 
 
-class UserPostRelatedField(serializers.HyperlinkedRelatedField):
+class ProfilePostRelatedField(serializers.HyperlinkedRelatedField):
     def get_url(self, obj, view_name, request, format):
         url_kwargs = {
-            'pk': obj.user.pk,
+            'pk': obj.profile.pk,
             'post_pk': obj.pk
         }
         return reverse(view_name, kwargs=url_kwargs, request=request, format=format)
 
     def get_object(self, view_name, view_args, view_kwargs):
         lookup_kwargs = {
-            'user__pk': view_kwargs['pk'],
+            'profile__pk': view_kwargs['pk'],
             'pk': view_kwargs['post_pk']
         }
         return self.get_queryset().get(**lookup_kwargs)
 
 
-class UserAddressRelatedField(serializers.HyperlinkedRelatedField):
+class ProfileAddressRelatedField(serializers.HyperlinkedRelatedField):
     def get_url(self, obj, view_name, request, format):
         url_kwargs = {
-            'pk': obj.user.pk,
+            'pk': obj.profile.pk,
             'address_pk': obj.pk
         }
         return reverse(view_name, kwargs=url_kwargs, request=request, format=format)
 
     def get_object(self, view_name, view_args, view_kwargs):
         lookup_kwargs = {
-            'user__pk': view_kwargs['pk'],
+            'profile__pk': view_kwargs['pk'],
             'pk': view_kwargs['address_pk']
         }
         return self.get_queryset().get(**lookup_kwargs)
 
 
-class UserSerializer(serializers.HyperlinkedModelSerializer):
+class ProfileSerializer(serializers.HyperlinkedModelSerializer):
 
-    posts = UserPostRelatedField(
+    posts = ProfilePostRelatedField(
         many=True,
         read_only=True,
-        view_name='user-post-detail',
+        view_name='profile-post-detail',
     )
 
-    addresses = UserAddressRelatedField(
+    addresses = ProfileAddressRelatedField(
         many=True,
         read_only=True,
-        view_name='user-address-detail',
+        view_name='profile-address-detail',
     )
 
     class Meta:
-        model = User
+        model = Profile
 
         fields = (
             'url',
@@ -182,7 +182,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 class CommentIdentityField(serializers.HyperlinkedIdentityField):
     def get_url(self, obj, view_name, request, format):
         url_kwargs = {
-            'pk': obj.post.user.pk,
+            'pk': obj.post.profile.pk,
             'post_pk': obj.post.pk,
             'comment_pk': obj.pk
         }
@@ -192,7 +192,7 @@ class CommentIdentityField(serializers.HyperlinkedIdentityField):
 class CommentSerializer(serializers.HyperlinkedModelSerializer):
 
     url = CommentIdentityField(
-        view_name='user-post-comment-detail'
+        view_name='profile-post-comment-detail'
     )
 
     class Meta:
@@ -206,9 +206,9 @@ class CommentSerializer(serializers.HyperlinkedModelSerializer):
         )
 
 
-class UserSummarySerializer(UserSerializer):
+class ProfileSummarySerializer(ProfileSerializer):
 
-    url = UserPostsTotalCommentsIdentity(view_name='user-summary-detail')
+    url = ProfilePostsTotalCommentsIdentity(view_name='profile-summary-detail')
 
     total_posts = serializers.SerializerMethodField()
     total_comments = serializers.SerializerMethodField()
@@ -223,7 +223,7 @@ class UserSummarySerializer(UserSerializer):
         return total
 
     class Meta:
-        model = User
+        model = Profile
         fields = (
             'url',
             'id',

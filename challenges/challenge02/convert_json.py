@@ -5,16 +5,17 @@ from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.types import Text
 
-user = 'pierry'
+profile = 'pierry'
 passwd = ''
 
-engine = create_engine(f'postgresql://{user}:{passwd}@localhost/blog')
+engine = create_engine(f'postgresql://{profile}:{passwd}@localhost/blog')
 
 Base = declarative_base()
 
-class User(Base):
-    __tablename__ = 'users'
+class Profile(Base):
+    __tablename__ = 'profiles'
     id = Column(Integer, primary_key=True)
+    user_id = Column(Integer)
     name = Column(String)
     email = Column(String)
 
@@ -22,22 +23,22 @@ class User(Base):
 class Address(Base):
     __tablename__ = 'addresses'
     id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey('users.id'))
+    profile_id = Column(Integer, ForeignKey('profiles.id'))
     street = Column(String)
     suite = Column(String)
     city = Column(String)
     zipcode = Column(String)
 
-    #user = relationship('User', back_ref="addresses")
+    #profile = relationship('Profile', back_ref="addresses")
 
 class Post(Base):
     __tablename__ = 'posts'
     id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey('users.id'))
+    profile_id = Column(Integer, ForeignKey('profiles.id'))
     title = Column(String)
     body = Column(Text)
 
-    #user = relationship('User', back_populates="posts")
+    #profile = relationship('Profile', back_populates="posts")
 
 class Comment(Base):
     __tablename__ = 'comments'
@@ -59,20 +60,20 @@ f = open('data.json')
 data = json.load(f)
 
 # POPULATING USERS TABLE
-users = data['users']
+profiles = data['profiles']
 
-for user in users:
-    u = User(id=user['id'], name=user['name'], email=user['email'])
+for profile in profiles:
+    u = Profile(id=profile['id'], user_id=profile['id'], name=profile['name'], email=profile['email'])
     session.add(u)
     session.commit()
 
 
 # POPULATING ADDRESSES TABLE
-users = data['users']
+profiles = data['profiles']
 
-for user in users:
-    u_adress = user['address']
-    a = Address(id=user['id'], user_id=user['id'], street=u_adress['street'],
+for profile in profiles:
+    u_adress = profile['address']
+    a = Address(id=profile['id'], profile_id=profile['id'], street=u_adress['street'],
                 suite=u_adress['suite'], city=u_adress['city'],
                 zipcode=u_adress['zipcode'])
     session.add(a)
@@ -83,7 +84,7 @@ for user in users:
 posts = data['posts']
 
 for post in posts:
-    p = Post(id=post['id'], user_id=post['userId'],
+    p = Post(id=post['id'], profile_id=post['profileId'],
              title=post['title'], body=post['body'])
 
     session.add(p)

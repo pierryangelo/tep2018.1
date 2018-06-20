@@ -1,30 +1,29 @@
 from rest_framework import generics
-from rest_framework.response import Response
 
-from .serializers import UserSerializer, CommentSerializer
+from .serializers import ProfileSerializer, CommentSerializer
 from .serializers import PostSerializer, AddressSerializer
-from .serializers import UserPostsTotalCommentsSerializer, UserSummarySerializer
-from .models import User, Post, Address, Comment
+from .serializers import ProfilePostsTotalCommentsSerializer, ProfileSummarySerializer
+from .models import Profile, Post, Address, Comment
 
 
-class UserPostTotalCommentList(generics.ListAPIView):
-    serializer_class = UserPostsTotalCommentsSerializer
-    queryset = User.objects.all()
+class ProfilePostTotalCommentList(generics.ListAPIView):
+    serializer_class = ProfilePostsTotalCommentsSerializer
+    queryset = Profile.objects.all()
 
 
-class UserPostTotalCommentDetail(generics.RetrieveAPIView):
-    serializer_class = UserPostsTotalCommentsSerializer
-    queryset = User.objects.all()
+class ProfilePostTotalCommentDetail(generics.RetrieveAPIView):
+    serializer_class = ProfilePostsTotalCommentsSerializer
+    queryset = Profile.objects.all()
 
 
-class UserList(generics.ListCreateAPIView):
-    serializer_class = UserSerializer
-    queryset = User.objects.all()
+class ProfileList(generics.ListCreateAPIView):
+    serializer_class = ProfileSerializer
+    queryset = Profile.objects.all()
 
 
-class UserDetail(generics.RetrieveUpdateDestroyAPIView):
-    serializer_class = UserSerializer
-    queryset = User.objects.all()
+class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = ProfileSerializer
+    queryset = Profile.objects.all()
 
 
 class AddressList(generics.ListCreateAPIView):
@@ -57,75 +56,75 @@ class PostDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Post.objects.all()
 
 
-class UserPostList(generics.ListCreateAPIView):
+class ProfilePostList(generics.ListCreateAPIView):
     serializer_class = PostSerializer
     lookup_url_kwarg = 'pk'
 
     def get_queryset(self):
-        user_pk = self.kwargs.get(self.lookup_url_kwarg)
-        user_posts = Post.objects.filter(user__pk=user_pk)
-        return user_posts
+        profile_pk = self.kwargs.get(self.lookup_url_kwarg)
+        profile_posts = Post.objects.filter(profile__pk=profile_pk)
+        return profile_posts
 
 
-class UserPostDetail(generics.RetrieveUpdateDestroyAPIView):
+class ProfilePostDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = PostSerializer
     queryset = Post.objects.all()
 
     def get_object(self):
-        user_pk = self.kwargs.get('pk')
+        profile_pk = self.kwargs.get('pk')
         post_pk = self.kwargs.get('post_pk')
-        user_post = Post.objects.get(id=post_pk, user__id=user_pk)
-        return user_post
+        profile_post = Post.objects.get(id=post_pk, profile__id=profile_pk)
+        return profile_post
 
 
-class UserPostCommentList(generics.ListCreateAPIView):
+class ProfilePostCommentList(generics.ListCreateAPIView):
     serializer_class = CommentSerializer
 
     def get_queryset(self):
-        user_pk = self.kwargs.get('pk')
+        profile_pk = self.kwargs.get('pk')
         post_pk = self.kwargs.get('post_pk')
-        user_post_comments = Comment.objects.filter(post__user__pk=user_pk, post__pk=post_pk)
-        return user_post_comments
+        profile_post_comments = Comment.objects.filter(post__profile__pk=profile_pk, post__pk=post_pk)
+        return profile_post_comments
 
 
-class UserPostCommentDetail(generics.RetrieveUpdateDestroyAPIView):
+class ProfilePostCommentDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = CommentSerializer
     queryset = Comment.objects.all()
 
     def get_object(self):
-        user_pk = self.kwargs.get('pk')
+        profile_pk = self.kwargs.get('pk')
         post_pk = self.kwargs.get('post_pk')
         comment_pk = self.kwargs.get('comment_pk')
-        user_post_comment = Comment.objects.get(id=comment_pk, post__id=post_pk, post__user__id=user_pk)
-        return user_post_comment
+        profile_post_comment = Comment.objects.get(id=comment_pk, post__id=post_pk, post__profile__id=profile_pk)
+        return profile_post_comment
 
 
-class UserAddressList(generics.ListCreateAPIView):
+class ProfileAddressList(generics.ListCreateAPIView):
     serializer_class = AddressSerializer
     lookup_url_kwarg = 'pk'
 
     def get_queryset(self):
-        user_pk = self.kwargs.get(self.lookup_url_kwarg)
-        user_addresses = Address.objects.filter(user__pk=user_pk)
-        return user_addresses
+        profile_pk = self.kwargs.get(self.lookup_url_kwarg)
+        profile_addresses = Address.objects.filter(profile__pk=profile_pk)
+        return profile_addresses
 
 
-class UserAddressDetail(generics.RetrieveUpdateDestroyAPIView):
+class ProfileAddressDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = AddressSerializer
     queryset = Address.objects.all()
 
     def get_object(self):
-        user_pk = self.kwargs.get('pk')
+        profile_pk = self.kwargs.get('pk')
         address_pk = self.kwargs.get('address_pk')
-        user_address = Address.objects.get(id=address_pk, user__pk=user_pk)
-        return user_address
+        profile_address = Address.objects.get(id=address_pk, profile__pk=profile_pk)
+        return profile_address
 
 
-class UserSummaryList(generics.ListAPIView):
-    serializer_class = UserSummarySerializer
-    queryset = User.objects.all()
+class ProfileSummaryList(generics.ListAPIView):
+    serializer_class = ProfileSummarySerializer
+    queryset = Profile.objects.all()
 
 
-class UserSummaryDetail(generics.RetrieveAPIView):
-    serializer_class = UserSummarySerializer
-    queryset = User.objects.all()
+class ProfileSummaryDetail(generics.RetrieveAPIView):
+    serializer_class = ProfileSummarySerializer
+    queryset = Profile.objects.all()
