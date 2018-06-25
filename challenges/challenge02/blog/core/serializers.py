@@ -32,7 +32,6 @@ class ProfilePostCommentRelatedField(serializers.HyperlinkedRelatedField):
 
 
 class PostSerializer(serializers.HyperlinkedModelSerializer):
-
     url = PostIdentityField(
         view_name='profile-post-detail'
     )
@@ -154,6 +153,8 @@ class ProfileAddressRelatedField(serializers.HyperlinkedRelatedField):
 
 class ProfileSerializer(serializers.HyperlinkedModelSerializer):
 
+    user = serializers.ReadOnlyField(source='user.username')
+
     posts = ProfilePostRelatedField(
         many=True,
         read_only=True,
@@ -171,7 +172,7 @@ class ProfileSerializer(serializers.HyperlinkedModelSerializer):
 
         fields = (
             'url',
-            'user_id',
+            'user',
             'id',
             'name',
             'email',

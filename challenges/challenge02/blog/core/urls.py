@@ -23,5 +23,5 @@ urlpatterns = [
     path(r'profile-comment/<int:pk>/', views.ProfilePostTotalCommentDetail.as_view(), name='profile-comment-detail'),
     path(r'profiles-summaries/', views.ProfileSummaryList.as_view(), name='profile-summary-list'),
     path(r'profile-summary/<int:pk>/', views.ProfileSummaryDetail.as_view(), name='profile-summary-detail'),
-
+    path(r'api-token/', views.CustomAuthToken.as_view()),
 ]
