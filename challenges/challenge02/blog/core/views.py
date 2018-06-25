@@ -2,7 +2,6 @@ from rest_framework import generics
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 
-from rest_framework import permissions
 from rest_framework.response import Response
 from .permissions import *
 
@@ -22,16 +21,21 @@ class ProfilePostTotalCommentDetail(generics.RetrieveAPIView):
     queryset = Profile.objects.all()
 
 
+# Refatore sua aplicação para permitir que apenas usuários logados tenham
+# acesso ao endpoint de usuários. Ainda assim, esse acesso será somente
+# leitura, ou seja, “safe methods”;
 class ProfileList(generics.ListCreateAPIView):
     serializer_class = ProfileSerializer
     queryset = Profile.objects.all()
-    http_method_names = ['get', 'options']
-    permission_classes = (IsAuthenticated,)
+    #http_method_names = ['get', 'options']
+    permission_classes = (IsProfileUserAuthenticated,)
 
 
+# Somente o usuário em questão tem permissão para atualizar ou remover seu perfil
 class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ProfileSerializer
     queryset = Profile.objects.all()
+    permission_classes = (IsProfileOwner,)
 
 
 class AddressList(generics.ListCreateAPIView):
@@ -42,6 +46,7 @@ class AddressList(generics.ListCreateAPIView):
 class AddressDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = AddressSerializer
     queryset = Address.objects.all()
+    permission_classes = (IsProfileOwner, IsProfileUserAuthenticated)
 
 
 class CommentList(generics.ListCreateAPIView):
@@ -57,12 +62,13 @@ class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
 class PostList(generics.ListCreateAPIView):
     serializer_class = PostSerializer
     queryset = Post.objects.all()
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (IsOwnerOrReadOnly,)
 
 
 class PostDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = PostSerializer
     queryset = Post.objects.all()
+    permission_classes = (IsOwnerOrReadOnly,)
 
 
 class ProfilePostList(generics.ListCreateAPIView):
@@ -78,7 +84,7 @@ class ProfilePostList(generics.ListCreateAPIView):
 
 class ProfilePostDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = PostSerializer
-    permission_classes = (IsPostOwner, IsAuthenticated)
+    permission_classes = (IsOwnerOrReadOnly, IsProfileUserAuthenticated)
 
     def get_object(self):
         profile_pk = self.kwargs.get('pk')
@@ -102,12 +108,14 @@ class ProfilePostCommentList(generics.ListCreateAPIView):
 class ProfilePostCommentDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = CommentSerializer
     queryset = Comment.objects.all()
+    permission_classes = (IsPostOwnerOrReadOnly,)
 
     def get_object(self):
         profile_pk = self.kwargs.get('pk')
         post_pk = self.kwargs.get('post_pk')
         comment_pk = self.kwargs.get('comment_pk')
         profile_post_comment = Comment.objects.get(id=comment_pk, post__id=post_pk, post__profile__id=profile_pk)
+        self.check_object_permissions(self.request, profile_post_comment)
         return profile_post_comment
 
 
