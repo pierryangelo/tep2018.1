@@ -4,9 +4,9 @@ from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from rest_framework import generics, permissions, filters
 
-from core.models import Usuario, Assunto, Disciplina, PlanoDeEstudo, Atividade
+from core.models import Usuario, Assunto, Disciplina, PlanoDeEstudo, Atividade, Anotacao
 from core.serializers import UsuarioSerializer, Assunto, AssuntoSerializer, DisciplinaSerializer, \
-    PlanoDeEstudoSerializer, AtividadeSerializer
+    PlanoDeEstudoSerializer, AtividadeSerializer, AnotacaoSerializer
 
 
 class UsuarioList(generics.ListAPIView):
@@ -21,16 +21,19 @@ class UsuarioDetail(generics.RetrieveAPIView):
     name = 'usuario-detail'
 
 
-class PlanosDeEstudoList(generics.ListCreateAPIView):
+class PlanoDeEstudoList(generics.ListCreateAPIView):
     queryset = PlanoDeEstudo.objects.all()
     serializer_class = PlanoDeEstudoSerializer
-    name = 'planos-list'
+    name = 'planodeestudo-list'
+
+    def perform_create(self, serializer):
+        serializer.save(usuario=self.request.user)
 
 
-class PlanosDeEstudoDetail(generics.ListCreateAPIView):
+class PlanoDeEstudoDetail(generics.ListCreateAPIView):
     queryset = PlanoDeEstudo.objects.all()
     serializer_class = PlanoDeEstudoSerializer
-    name = 'planos-detail'
+    name = 'planodeestudo-detail'
 
 
 class AssuntoList(generics.ListCreateAPIView):
@@ -67,3 +70,15 @@ class AtividadeDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Atividade.objects.all()
     serializer_class = AtividadeSerializer
     name = 'atividade-detail'
+
+
+class AnotacaoList(generics.ListCreateAPIView):
+    queryset = Anotacao.objects.all()
+    serializer_class = AnotacaoSerializer
+    name = 'anotacao-list'
+
+
+class AnotacaoDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Anotacao.objects.all()
+    serializer_class = AnotacaoSerializer
+    name = 'anotacao-detail'

@@ -8,15 +8,18 @@ class Usuario(AbstractUser):
 
 
 class PlanoDeEstudo(models.Model):
-    nome = models.CharField(max_length=200)
+    nome = models.CharField(max_length=200, unique=True)
     usuario = models.ForeignKey(Usuario,
                                 related_name='planos',
                                 on_delete=models.CASCADE)
     is_publico = models.BooleanField(default=False)
 
+    def __str__(self):
+        return self.nome
+
 
 class Disciplina(models.Model):
-    nome = models.CharField(max_length=200)
+    nome = models.CharField(max_length=200, unique=True)
     descricao = models.TextField(blank=True)
 
     def __str__(self):
@@ -27,7 +30,7 @@ class Assunto(models.Model):
     disciplina = models.ForeignKey(Disciplina,
                                    related_name='assuntos',
                                    on_delete=models.CASCADE)
-    nome = models.CharField(max_length=200)
+    nome = models.CharField(max_length=200, unique=True)
     descricao = models.TextField(blank=True)
 
     def __str__(self):
@@ -45,6 +48,9 @@ class Atividade(models.Model):
     inicio = models.DateTimeField()
     fim = models.DateTimeField()
     is_realizada = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f'{self.plano} - {self.assunto}'
 
 
 class Anotacao(models.Model):

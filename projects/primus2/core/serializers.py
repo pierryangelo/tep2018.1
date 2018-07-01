@@ -1,4 +1,3 @@
-from django.contrib.auth.models import User
 from rest_framework import serializers
 
 from core.models import Usuario
@@ -15,10 +14,56 @@ class UsuarioSerializer(serializers.HyperlinkedModelSerializer):
         fields = "__all__"
 
 
+class AnotacaoSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Anotacao
+        fields = (
+            'id',
+            'descricao',
+        )
+
+
+class AtividadeSerializer(serializers.HyperlinkedModelSerializer):
+    anotacoes = AnotacaoSerializer(
+        many=True,
+        read_only=True
+    )
+
+    class Meta:
+        model = Atividade
+        fields = (
+            'url',
+            'id',
+            'criada',
+            'inicio',
+            'fim',
+            'is_realizada',
+            'assunto',
+            'anotacoes',
+        )
+
+
 class PlanoDeEstudoSerializer(serializers.HyperlinkedModelSerializer):
+    atividades = AtividadeSerializer(
+        many=True,
+        read_only=True
+    )
+
+    usuario = serializers.SlugRelatedField(
+        queryset=Usuario.objects.all(),
+        slug_field='username',
+    )
+
     class Meta:
         model = PlanoDeEstudo
-        fields = '__all__'
+        fields = (
+            'url',
+            'id',
+            'usuario',
+            'nome',
+            'atividades',
+            'is_publico',
+        )
 
 
 class AssuntoSerializer(serializers.HyperlinkedModelSerializer):
@@ -43,8 +88,3 @@ class DisciplinaSerializer(serializers.HyperlinkedModelSerializer):
         model = Disciplina
         fields = "__all__"
 
-
-class AtividadeSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Atividade
-        fields = '__all__'
