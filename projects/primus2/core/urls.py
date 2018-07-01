@@ -15,9 +15,9 @@ urlpatterns = [
          name=views.DisciplinaList.name),
     path('disciplina/<int:pk>/', views.DisciplinaDetail.as_view(),
          name=views.DisciplinaDetail.name),
-    path('assuntos/', views.AssuntoList.as_view(),
+    path('disciplina-assuntos/', views.AssuntoList.as_view(),
          name=views.AssuntoList.name),
-    path('assunto/<int:pk>/', views.AssuntoDetail.as_view(),
+    path('disciplina-assunto/<int:pk>/', views.AssuntoDetail.as_view(),
          name=views.AssuntoDetail.name),
     path('atividades/', views.AtividadeList.as_view(),
          name=views.AtividadeList.name),
@@ -26,5 +26,6 @@ urlpatterns = [
     path('atividade-anotacoes/', views.AnotacaoList.as_view(),
          name=views.AnotacaoList.name),
     path('atividade-anotacao/<int:pk>/', views.AnotacaoDetail.as_view(),
-         name=views.AnotacaoDetail.name)
+         name=views.AnotacaoDetail.name),
+    path('', views.ApiRoot.as_view(), name=views.ApiRoot.name),
 ]

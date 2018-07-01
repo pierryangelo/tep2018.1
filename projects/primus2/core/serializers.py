@@ -19,6 +19,7 @@ class AnotacaoSerializer(serializers.HyperlinkedModelSerializer):
         model = Anotacao
         fields = (
             'id',
+            'atividade',
             'descricao',
         )
 
@@ -71,6 +72,7 @@ class AssuntoSerializer(serializers.HyperlinkedModelSerializer):
         model = Assunto
         fields = (
             'url',
+            'id',
             'disciplina',
             'nome',
             'descricao',

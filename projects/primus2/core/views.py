@@ -82,3 +82,16 @@ class AnotacaoDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Anotacao.objects.all()
     serializer_class = AnotacaoSerializer
     name = 'anotacao-detail'
+
+class ApiRoot(generics.GenericAPIView):
+    name = 'api-root'
+
+    def get(self, request, *args, **kwargs):
+        return Response({
+            'usuarios': reverse(UsuarioList.name, request=request),
+            'planos': reverse(PlanoDeEstudoList.name, request=request),
+            'disciplinas': reverse(DisciplinaList.name, request=request),
+            'disciplina-assuntos': reverse(AssuntoList.name, request=request),
+            'atividades': reverse(AtividadeList.name, request=request),
+            'atividade-anotacoes': reverse(AnotacaoList.name, request=request)
+        })
