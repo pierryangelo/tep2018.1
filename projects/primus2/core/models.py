@@ -20,6 +20,9 @@ class PlanoDeEstudo(models.Model):
 
 
 class Disciplina(models.Model):
+    plano = models.ForeignKey(PlanoDeEstudo,
+                              related_name='disciplinas',
+                              on_delete=models.CASCADE)
     nome = models.CharField(max_length=200, unique=True)
     descricao = models.TextField(blank=True)
 
@@ -39,9 +42,6 @@ class Assunto(models.Model):
 
 
 class Atividade(models.Model):
-    plano = models.ForeignKey(PlanoDeEstudo,
-                              related_name='atividades',
-                              on_delete=models.CASCADE)
     estudante = models.ForeignKey(User, related_name='estudantes',
                                   on_delete=models.DO_NOTHING)
     assunto = models.ForeignKey(Assunto,

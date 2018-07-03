@@ -48,7 +48,18 @@ class IsProfessorAndPlanOwnerOrAdmin(permissions.BasePermission):
         return obj.professor == request.user or request.user.is_superuser
 
 
-# Somente professores podem cadastrar atividades
+# Professor só pode apagar as disciplinas dos planos que é autor.
+class IsProfessorOwnerOfSubjectOrAdmin(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if request.user.is_anonymous:
+            return False
+
+        return request.user.is_professor or request.user.is_superuser
+
+    def has_object_permission(self, request, view, obj):
+        return obj.plano.professor == request.user or request.user.is_superuser
+
+
 
 
 

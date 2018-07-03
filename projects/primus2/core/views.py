@@ -1,3 +1,4 @@
+from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from rest_framework import generics, permissions, filters
@@ -52,6 +53,31 @@ class PlanoDeEstudoDetail(generics.RetrieveUpdateDestroyAPIView):
     )
 
 
+class DisciplinaList(generics.ListCreateAPIView):
+    queryset = Disciplina.objects.all()
+    serializer_class = DisciplinaSerializer
+    name = 'disciplina-list'
+    permission_classes = (
+
+    )
+
+    # Só permite cadastrar disciplinas nos planos os quais é dono.
+    def perform_create(self, serializer):
+        if self.request.user != serializer.validated_data['plano'].professor:
+            raise ValidationError('Você não é dono do plano de estudos!')
+        serializer.save()
+
+
+class DisciplinaDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Disciplina.objects.all()
+    serializer_class = DisciplinaSerializer
+    name = 'disciplina-detail'
+    permission_classes = (
+        IsProfessorOwnerOfSubjectOrAdmin,
+        permissions.IsAuthenticated
+    )
+
+
 class AssuntoList(generics.ListCreateAPIView):
     queryset = Assunto.objects.all()
     serializer_class = AssuntoSerializer
@@ -62,18 +88,6 @@ class AssuntoDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Assunto.objects.all()
     serializer_class = AssuntoSerializer
     name = 'assunto-detail'
-
-
-class DisciplinaList(generics.ListCreateAPIView):
-    queryset = Disciplina.objects.all()
-    serializer_class = DisciplinaSerializer
-    name = 'disciplina-list'
-
-
-class DisciplinaDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Disciplina.objects.all()
-    serializer_class = DisciplinaSerializer
-    name = 'disciplina-detail'
 
 
 class AtividadeList(generics.ListCreateAPIView):

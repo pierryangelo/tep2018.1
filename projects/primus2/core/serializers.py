@@ -40,7 +40,6 @@ class AtividadeSerializer(serializers.HyperlinkedModelSerializer):
         fields = (
             'url',
             'id',
-            'plano',
             'estudante',
             'criada',
             'inicio',
@@ -58,7 +57,6 @@ class PlanoDeEstudoSerializer(serializers.HyperlinkedModelSerializer):
     )
 
     professor = serializers.ReadOnlyField(source='User.username')
-
 
     class Meta:
         model = PlanoDeEstudo
