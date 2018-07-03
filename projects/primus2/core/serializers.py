@@ -25,6 +25,7 @@ class AnotacaoSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class AtividadeSerializer(serializers.HyperlinkedModelSerializer):
+
     anotacoes = AnotacaoSerializer(
         many=True,
         read_only=True
@@ -39,6 +40,7 @@ class AtividadeSerializer(serializers.HyperlinkedModelSerializer):
         fields = (
             'url',
             'id',
+            'plano',
             'estudante',
             'criada',
             'inicio',

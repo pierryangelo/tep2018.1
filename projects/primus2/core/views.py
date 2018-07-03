@@ -26,7 +26,7 @@ class PlanoDeEstudoList(generics.ListCreateAPIView):
     serializer_class = PlanoDeEstudoSerializer
     name = 'planodeestudo-list'
     permission_classes = (
-        IsProfessorOrAdmin,
+        IsProfessorAndPlanOwnerOrAdmin,
         permissions.IsAuthenticated,
     )
 
@@ -34,12 +34,12 @@ class PlanoDeEstudoList(generics.ListCreateAPIView):
         serializer.save(professor=self.request.user)
 
 
-class PlanoDeEstudoDetail(generics.ListCreateAPIView):
+class PlanoDeEstudoDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = PlanoDeEstudo.objects.all()
     serializer_class = PlanoDeEstudoSerializer
     name = 'planodeestudo-detail'
     permission_classes = (
-        IsProfessorOrAdmin,
+        IsProfessorAndPlanOwnerOrAdmin,
         permissions.IsAuthenticated
     )
 
@@ -72,6 +72,10 @@ class AtividadeList(generics.ListCreateAPIView):
     queryset = Atividade.objects.all()
     serializer_class = AtividadeSerializer
     name = 'atividade-list'
+    permission_classes = (
+        IsDonoAtividade,
+        permissions.IsAuthenticated,
+    )
 
 
 class AtividadeDetail(generics.RetrieveUpdateDestroyAPIView):
