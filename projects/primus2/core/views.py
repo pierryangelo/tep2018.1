@@ -13,12 +13,20 @@ class UsuarioList(generics.ListAPIView):
     queryset = User.objects.all()
     serializer_class = UsuarioSerializer
     name = 'user-list'
+    permission_classes = (
+        IsAdminOrNothing,
+        permissions.IsAuthenticated
+    )
 
 
 class UsuarioDetail(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UsuarioSerializer
     name = 'user-detail'
+    permission_classes = (
+        IsProfileOwnerOrIsAdmin,
+        permissions.IsAuthenticated,
+    )
 
 
 class PlanoDeEstudoList(generics.ListCreateAPIView):
