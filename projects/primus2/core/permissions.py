@@ -60,12 +60,6 @@ class IsProfessorOwnerOfSubjectOrAdmin(permissions.BasePermission):
         return obj.plano.professor == request.user or request.user.is_superuser
 
 
-
-
-
-
-
-
 # Estudantes só podem ver suas próprias atividades
 class IsDonoAtividade(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
@@ -77,3 +71,13 @@ class IsDonoAtividade(permissions.BasePermission):
         if hasattr(request.user, 'is_aluno'):
             return obj.estudante.is_aluno and obj.estudante == request.user
 
+
+class IsProfessorOrAdminOrReadOnly(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if request.user.is_anonymous:
+            return False
+
+        if request.method in permissions.SAFE_METHODS:
+            return True
+
+        return request.user.is_professor or request.user.is_superuser

@@ -57,8 +57,12 @@ class DisciplinaList(generics.ListCreateAPIView):
     queryset = Disciplina.objects.all()
     serializer_class = DisciplinaSerializer
     name = 'disciplina-list'
-    permission_classes = (
 
+    # Professores podem cadastrar novas disciplinas, entretanto alunos
+    # só podem visualizá-las.
+    permission_classes = (
+        IsProfessorOrAdminOrReadOnly,
+        permissions.IsAuthenticated
     )
 
     # Só permite cadastrar disciplinas nos planos os quais é dono.
@@ -72,6 +76,8 @@ class DisciplinaDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Disciplina.objects.all()
     serializer_class = DisciplinaSerializer
     name = 'disciplina-detail'
+
+    # Somente professores donos de susas disciplinas podem removê-las.
     permission_classes = (
         IsProfessorOwnerOfSubjectOrAdmin,
         permissions.IsAuthenticated
