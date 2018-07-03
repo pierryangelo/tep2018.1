@@ -1,5 +1,4 @@
 from django.contrib import admin
-from django.contrib.auth import forms
 from django.contrib.auth.admin import UserAdmin
 
 from core.models import PlanoDeEstudo, Atividade, Disciplina, Assunto, Anotacao, User
