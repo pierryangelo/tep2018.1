@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from core.models import Usuario
+from core.models import User
 from core.models import PlanoDeEstudo
 from core.models import Disciplina
 from core.models import Assunto
@@ -10,7 +10,7 @@ from core.models import Anotacao
 
 class UsuarioSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = Usuario
+        model = User
         fields = "__all__"
 
 
@@ -29,12 +29,17 @@ class AtividadeSerializer(serializers.HyperlinkedModelSerializer):
         many=True,
         read_only=True
     )
+    estudante = serializers.SlugRelatedField(
+        queryset=User.objects.all(),
+        slug_field='username',
+    )
 
     class Meta:
         model = Atividade
         fields = (
             'url',
             'id',
+            'estudante',
             'criada',
             'inicio',
             'fim',
@@ -50,17 +55,15 @@ class PlanoDeEstudoSerializer(serializers.HyperlinkedModelSerializer):
         read_only=True
     )
 
-    usuario = serializers.SlugRelatedField(
-        queryset=Usuario.objects.all(),
-        slug_field='username',
-    )
+    professor = serializers.ReadOnlyField(source='User.username')
+
 
     class Meta:
         model = PlanoDeEstudo
         fields = (
             'url',
             'id',
-            'usuario',
+            'professor',
             'nome',
             'atividades',
             'is_publico',

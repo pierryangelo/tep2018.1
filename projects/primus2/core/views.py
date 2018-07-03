@@ -1,39 +1,47 @@
-from django.shortcuts import render
-
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from rest_framework import generics, permissions, filters
 
-from core.models import Usuario, Assunto, Disciplina, PlanoDeEstudo, Atividade, Anotacao
-from core.serializers import UsuarioSerializer, Assunto, AssuntoSerializer, DisciplinaSerializer, \
+from core.models import User, Assunto, Disciplina, PlanoDeEstudo, Atividade, Anotacao
+from core.serializers import UsuarioSerializer, AssuntoSerializer, DisciplinaSerializer, \
     PlanoDeEstudoSerializer, AtividadeSerializer, AnotacaoSerializer
+
+from core.permissions import *
 
 
 class UsuarioList(generics.ListAPIView):
-    queryset = Usuario.objects.all()
+    queryset = User.objects.all()
     serializer_class = UsuarioSerializer
-    name = 'usuario-list'
+    name = 'user-list'
 
 
 class UsuarioDetail(generics.RetrieveAPIView):
-    queryset = Usuario.objects.all()
+    queryset = User.objects.all()
     serializer_class = UsuarioSerializer
-    name = 'usuario-detail'
+    name = 'user-detail'
 
 
 class PlanoDeEstudoList(generics.ListCreateAPIView):
     queryset = PlanoDeEstudo.objects.all()
     serializer_class = PlanoDeEstudoSerializer
     name = 'planodeestudo-list'
+    permission_classes = (
+        IsProfessorOrAdmin,
+        permissions.IsAuthenticated,
+    )
 
     def perform_create(self, serializer):
-        serializer.save(usuario=self.request.user)
+        serializer.save(professor=self.request.user)
 
 
 class PlanoDeEstudoDetail(generics.ListCreateAPIView):
     queryset = PlanoDeEstudo.objects.all()
     serializer_class = PlanoDeEstudoSerializer
     name = 'planodeestudo-detail'
+    permission_classes = (
+        IsProfessorOrAdmin,
+        permissions.IsAuthenticated
+    )
 
 
 class AssuntoList(generics.ListCreateAPIView):
@@ -82,6 +90,7 @@ class AnotacaoDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Anotacao.objects.all()
     serializer_class = AnotacaoSerializer
     name = 'anotacao-detail'
+
 
 class ApiRoot(generics.GenericAPIView):
     name = 'api-root'

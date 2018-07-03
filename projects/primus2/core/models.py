@@ -2,17 +2,18 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 
-class Usuario(AbstractUser):
+class User(AbstractUser):
     is_aluno = models.BooleanField(default=False)
     is_professor = models.BooleanField(default=False)
 
 
 class PlanoDeEstudo(models.Model):
     nome = models.CharField(max_length=200, unique=True)
-    usuario = models.ForeignKey(Usuario,
+    professor = models.ForeignKey(User,
                                 related_name='planos',
                                 on_delete=models.CASCADE)
     is_publico = models.BooleanField(default=False)
+
 
     def __str__(self):
         return self.nome
@@ -41,6 +42,8 @@ class Atividade(models.Model):
     plano = models.ForeignKey(PlanoDeEstudo,
                               related_name='atividades',
                               on_delete=models.CASCADE)
+    estudante = models.ForeignKey(User, related_name='estudantes',
+                                  on_delete=models.DO_NOTHING)
     assunto = models.ForeignKey(Assunto,
                                 related_name='atividades',
                                 on_delete=models.CASCADE)
