@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework.validators import UniqueTogetherValidator
 
 from core.models import User
 from core.models import PlanoDeEstudo
@@ -80,6 +81,12 @@ class AssuntoSerializer(serializers.HyperlinkedModelSerializer):
             'nome',
             'descricao',
         )
+        validators = [
+            UniqueTogetherValidator(
+                queryset=Assunto.objects.all(),
+                fields=('disciplina', 'nome')
+            )
+        ]
 
 
 class DisciplinaSerializer(serializers.HyperlinkedModelSerializer):

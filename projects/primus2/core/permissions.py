@@ -60,6 +60,18 @@ class IsProfessorOwnerOfSubjectOrAdmin(permissions.BasePermission):
         return obj.plano.professor == request.user or request.user.is_superuser
 
 
+# Professor só pode apagar as assuntos das disciplinas de que é autor.
+class IsProfessorOwnerOfSubjectOfDisciplineOrAdmin(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if request.user.is_anonymous:
+            return False
+
+        return request.user.is_professor or request.user.is_superuser
+
+    def has_object_permission(self, request, view, obj):
+        return obj.disciplina.plano.professor == request.user or request.user.is_superuser
+
+
 # Estudantes só podem ver suas próprias atividades
 class IsDonoAtividade(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):

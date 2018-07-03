@@ -34,8 +34,11 @@ class Assunto(models.Model):
     disciplina = models.ForeignKey(Disciplina,
                                    related_name='assuntos',
                                    on_delete=models.CASCADE)
-    nome = models.CharField(max_length=200, unique=True)
+    nome = models.CharField(max_length=200,)
     descricao = models.TextField(blank=True)
+
+    class Meta:
+        unique_together = ('disciplina', 'nome')
 
     def __str__(self):
         return self.nome

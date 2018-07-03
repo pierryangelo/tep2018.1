@@ -88,12 +88,29 @@ class AssuntoList(generics.ListCreateAPIView):
     queryset = Assunto.objects.all()
     serializer_class = AssuntoSerializer
     name = 'assunto-list'
+    permission_classes = (
+        IsProfessorOrAdminOrReadOnly,
+        permissions.IsAuthenticated
+    )
+
+    # Professores só podem cadastrar assuntos vinculados
+    # às disciplinas as quais são donos.
+    def perform_create(self, serializer):
+        if self.request.user != serializer.validated_data['disciplina'].plano.professor:
+            raise ValidationError('Você não pode cadastrar um assunto vinculado a uma disciplina que você não cadastrou!')
+        serializer.save()
 
 
 class AssuntoDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Assunto.objects.all()
     serializer_class = AssuntoSerializer
     name = 'assunto-detail'
+
+    # Professores só podem apagar os assuntos das disciplinas de que é autor.
+    permission_classes = (
+        IsProfessorOwnerOfSubjectOfDisciplineOrAdmin,
+        permissions.IsAuthenticated
+    )
 
 
 class AtividadeList(generics.ListCreateAPIView):
