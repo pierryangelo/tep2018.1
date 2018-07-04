@@ -105,6 +105,9 @@ class AssuntoDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Assunto.objects.all()
     serializer_class = AssuntoSerializer
     name = 'assunto-detail'
+    filter_fields = ('nome',)
+    search_fields = ('^nome',)
+    ordering_fields = ('nome',)
 
     # Professores só podem apagar os assuntos das disciplinas de que é autor.
     permission_classes = (

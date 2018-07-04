@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'core',
     'rest_framework',
-    'drf_openapi',
+    'crispy_forms',
+    'rest_framework_swagger',
 ]
 
 MIDDLEWARE = [
@@ -128,18 +129,24 @@ AUTH_USER_MODEL = 'core.User'
 
 
 REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+        'rest_framework.filters.SearchFilter',
+        'rest_framework.filters.OrderingFilter',
+    ),
+
     'DEFAULT_PAGINATION_CLASS':
         'core.pagination.LimitOffsetPaginationWithMaxLimit',
     'PAGE_SIZE': 5,
 
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
+        #'rest_framework.permissions.IsAuthenticated',
     ),
 
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        #'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        #'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
 
     'DEFAULT_THROTTLE_CLASSES': (
@@ -147,12 +154,12 @@ REST_FRAMEWORK = {
         'rest_framework.throttling.UserRateThrottle',
     ),
 
-    'DEFAULT_THROTTLE_RATES': {
-        'anon': '5/hour',
-        'user': '1/hour',
-        'atividades': '30/min',
-        'atividade': '30/min',
-    },
+    # 'DEFAULT_THROTTLE_RATES': {
+    #     'anon': '1/hour',
+    #     'user': '5/hour',
+    #     'atividades': '30/min',
+    #     'atividade': '30/min',
+    # },
 }
 
 SIMPLE_JWT = {
