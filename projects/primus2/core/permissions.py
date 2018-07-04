@@ -98,3 +98,17 @@ class StudentsCanDeleteTheirActivities(permissions.BasePermission):
                 return True
 
         return False
+
+
+# Somente o aluno dono da atividade pode apagá-la.
+class IsNoteOwner(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if request.user.is_anonymous:
+            return False
+
+        if request.user.is_aluno:
+            return True
+
+    def has_object_permission(self, request, view, obj):
+        return request.user == obj.atividade.estudante
+

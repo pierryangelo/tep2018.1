@@ -19,6 +19,7 @@ class AnotacaoSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Anotacao
         fields = (
+            'url',
             'id',
             'atividade',
             'descricao',

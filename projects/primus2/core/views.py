@@ -170,12 +170,34 @@ class AnotacaoList(generics.ListCreateAPIView):
     queryset = Anotacao.objects.all()
     serializer_class = AnotacaoSerializer
     name = 'anotacao-list'
+    permission_classes = (
+        IsNoteOwner,
+        permissions.IsAuthenticated
+    )
+
+    # Aluno só pode fazer anotacões em suas atividades.
+    def perform_create(self, serializer):
+        if self.request.user != serializer.validated_data['atividade'].estudante:
+            raise ValidationError('Você não pode fazer uma anotação em uma atividade que não lhe pertence!')
+        serializer.save()
+
+    # Retorna somente as anotações do aluno requisitante.
+    def get_queryset(self):
+        if self.request.user.is_anonymous:
+            return None
+
+        user = self.request.user
+        return Anotacao.objects.filter(atividade__estudante=user)
 
 
 class AnotacaoDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Anotacao.objects.all()
     serializer_class = AnotacaoSerializer
     name = 'anotacao-detail'
+    permission_classes = (
+        IsNoteOwner,
+        permissions.IsAuthenticated
+    )
 
 
 class ApiRoot(generics.GenericAPIView):

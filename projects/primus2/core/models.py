@@ -56,7 +56,7 @@ class Atividade(models.Model):
     is_realizada = models.BooleanField(default=False)
 
     def __str__(self):
-        return f'{self.disciplina.assunto} - {self.assunto}'
+        return f'{self.assunto}'
 
 
 class Anotacao(models.Model):
