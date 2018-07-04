@@ -41,7 +41,7 @@ class Assunto(models.Model):
         unique_together = ('disciplina', 'nome')
 
     def __str__(self):
-        return self.nome
+        return f'{self.disciplina.plano} - {self.disciplina} - {self.nome}'
 
 
 class Atividade(models.Model):
@@ -56,7 +56,7 @@ class Atividade(models.Model):
     is_realizada = models.BooleanField(default=False)
 
     def __str__(self):
-        return f'{self.plano} - {self.assunto}'
+        return f'{self.disciplina.assunto} - {self.assunto}'
 
 
 class Anotacao(models.Model):

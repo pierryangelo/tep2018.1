@@ -1,14 +1,5 @@
 from rest_framework import permissions
 
-
-class IsOwnerOrReadOnly(permissions.BasePermission):
-    def has_object_permission(self, request, view, obj):
-        if request.method in permissions.SAFE_METHODS:
-            return True
-
-        return obj.user == request.user
-
-
 # A view UsuarioList só pode ser acessada por o super usuário.
 # Usuários regulares poderão visualizar outros perfis, porém só podem modificar
 # ou deletar o seu próprio perfil.
@@ -72,18 +63,6 @@ class IsProfessorOwnerOfSubjectOfDisciplineOrAdmin(permissions.BasePermission):
         return obj.disciplina.plano.professor == request.user or request.user.is_superuser
 
 
-# Estudantes só podem ver suas próprias atividades
-class IsDonoAtividade(permissions.BasePermission):
-    def has_object_permission(self, request, view, obj):
-        # Professores têm acesso às atividades cadastradas por ele
-        if hasattr(request.user, 'is_professor'):
-            return obj.estudante.is_professor and obj.plano.professor == request.user
-
-        # Estudantes têm acesso somentes às suas atividades
-        if hasattr(request.user, 'is_aluno'):
-            return obj.estudante.is_aluno and obj.estudante == request.user
-
-
 class IsProfessorOrAdminOrReadOnly(permissions.BasePermission):
     def has_permission(self, request, view):
         if request.user.is_anonymous:
@@ -93,3 +72,29 @@ class IsProfessorOrAdminOrReadOnly(permissions.BasePermission):
             return True
 
         return request.user.is_professor or request.user.is_superuser
+
+
+# Permite estudantes marcarem as atividades como concluídas,
+# estudantes não podem deletar atividades (somente marcá-las como realizadas)
+class StudentsCanDeleteTheirActivities(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if request.user.is_anonymous:
+            return False
+
+        return True
+
+    def has_object_permission(self, request, view, obj):
+        if request.user.is_superuser:
+            return True
+
+        if request.user.is_professor:
+            return obj.assunto.disciplina.plano.professor == request.user
+
+        if request.user.is_aluno and request.method in permissions.SAFE_METHODS:
+            return True
+
+        if request.method == 'PATCH':
+            if request.user == obj.estudante:
+                return True
+
+        return False

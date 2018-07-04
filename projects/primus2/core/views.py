@@ -118,15 +118,52 @@ class AtividadeList(generics.ListCreateAPIView):
     serializer_class = AtividadeSerializer
     name = 'atividade-list'
     permission_classes = (
-        IsDonoAtividade,
-        permissions.IsAuthenticated,
+        IsProfessorOrAdminOrReadOnly,
+        permissions.IsAuthenticated
     )
+
+    # Não pode cadastrar uma atividade de um plano de aula que não lhe pertence.
+    def perform_create(self, serializer):
+        if self.request.user != serializer.validated_data['assunto'].disciplina.plano.professor:
+            raise ValidationError('Você não pode cadastrar um assunto vinculado a uma disciplina que você não cadastrou!')
+        serializer.save()
+
+
+    # Se o usuário logado for professor, retorna as atividades deste professor,
+    # caso estudante, analogamente.
+    def get_queryset(self):
+        if self.request.user.is_anonymous:
+            return None
+
+        user = self.request.user
+
+        if user.is_professor:
+            return Atividade.objects.filter(assunto__disciplina__plano__professor=user)
+
+        if user.is_aluno:
+            return Atividade.objects.filter(estudante=user)
+
+        return None
 
 
 class AtividadeDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Atividade.objects.all()
     serializer_class = AtividadeSerializer
     name = 'atividade-detail'
+    permission_classes = (
+        StudentsCanDeleteTheirActivities,
+        permissions.IsAuthenticated
+    )
+
+    def perform_update(self, serializer):
+        if not (serializer.validated_data['estudante']
+                and serializer.validated_data['inicio']
+                and serializer.validated_data['fim']
+                and serializer.validated_data['assunto']) \
+                and self.request.user == serializer.validated_data['estudante'] \
+                and serializer.validated_data['is_realizada']:
+            serializer.save()
+        serializer.save()
 
 
 class AnotacaoList(generics.ListCreateAPIView):
