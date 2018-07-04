@@ -40,9 +40,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'core',
+    'django_filters',
     'rest_framework',
     'crispy_forms',
     'rest_framework_swagger',
+    'oauth2_provider',
+    'social_django',
+    'rest_framework_social_oauth2',
 ]
 
 MIDDLEWARE = [
@@ -68,10 +72,18 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
 ]
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'social_django.context_processors.backends',
+    'social_django.context_processors.login_redirect',
+)
 
 WSGI_APPLICATION = 'primus.wsgi.application'
 
@@ -140,13 +152,15 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 5,
 
     'DEFAULT_PERMISSION_CLASSES': (
-        #'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.IsAuthenticated',
     ),
 
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-        #'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+        'rest_framework_social_oauth2.authentication.SocialAuthentication'
     ),
 
     'DEFAULT_THROTTLE_CLASSES': (
@@ -154,12 +168,12 @@ REST_FRAMEWORK = {
         'rest_framework.throttling.UserRateThrottle',
     ),
 
-    # 'DEFAULT_THROTTLE_RATES': {
-    #     'anon': '1/hour',
-    #     'user': '5/hour',
-    #     'atividades': '30/min',
-    #     'atividade': '30/min',
-    # },
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '20/hour',
+        'user': '100/hour',
+        'atividades': '20/min',
+        'atividade': '20/min',
+    },
 }
 
 SIMPLE_JWT = {
@@ -183,3 +197,8 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 }
+
+AUTHENTICATION_BACKENDS = (
+    'rest_framework_social_oauth2.backends.DjangoOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)

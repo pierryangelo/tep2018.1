@@ -58,6 +58,10 @@ class DisciplinaList(generics.ListCreateAPIView):
     serializer_class = DisciplinaSerializer
     name = 'disciplina-list'
 
+    filter_fields = ('nome',)
+    search_fields = ('^nome',)
+    ordering_fields = ('nome',)
+
     # Professores podem cadastrar novas disciplinas, entretanto alunos
     # só podem visualizá-las.
     permission_classes = (
@@ -105,6 +109,7 @@ class AssuntoDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Assunto.objects.all()
     serializer_class = AssuntoSerializer
     name = 'assunto-detail'
+
     filter_fields = ('nome',)
     search_fields = ('^nome',)
     ordering_fields = ('nome',)
