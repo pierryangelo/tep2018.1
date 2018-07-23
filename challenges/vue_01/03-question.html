@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>question 03</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue">
+    </script>
+</head>
+<body>
+    <div id="app">
+        Insira um número: <input v-model="numero">
+        <br>
+        Numeros pares entre 0 e <span v-if="numero">{{ numero }}</span> (inclusive):
+        <button v-on:click="gerar_pares">Gerar pares</button>
+        <br>
+        <span v-if="numeros">
+            <span v-text="numeros"></span>
+        </span>
+    </div>
+
+    <script type="text/javascript">
+        var app = new Vue({
+            el: "#app",
+            data: {
+                numero: '',
+                pares: [],
+                numeros: ''
+            },
+            methods: {
+                gerar_pares: function() {
+                    for (let i = 0; i <= this.numero; i++) {
+                        if (i % 2 == 0) {
+                            this.pares.push(i);
+                        }
+                    }
+                    this.numeros = String(this.pares);
+                }
+            }
+        });
+    </script>
+</body>
+</html>

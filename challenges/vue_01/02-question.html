@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>question 02</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue">
+    </script>
+</head>
+<body>
+    <div id="app">
+        Insira o tipo de carteira: <input v-model="categoria">
+        <br>
+        Categoria:
+        <span v-if="categoria">
+            <span v-if="categoria ===  'A'">
+                Você pode pilotar moto.
+            </span>
+            <span v-else-if="categoria === 'B'">
+                Você pode dirigir carro.
+            </span>
+            <span v-else-if="categoria === 'D'">
+                Você pode dirigir carro e caminhão.
+            </span>
+            <span v-else>Carteira inválida!</span>
+        </span>
+    </div>
+
+    <script type="text/javascript">
+        var app = new Vue({
+            el: "#app",
+            data: {
+                categoria: '',
+            },
+        });
+    </script>
+</body>
+</html>
